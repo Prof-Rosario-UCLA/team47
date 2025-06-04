@@ -1,0 +1,10 @@
+node_modules/
+npm-debug.log*
+package-lock.json
+dist/*
+**/*.wasm
+**/*.wat
+.vscode/
+.DS_Store
+*.lock
+.env

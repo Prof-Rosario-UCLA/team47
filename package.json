@@ -1,0 +1,16 @@
+{
+  "name": "cs144-final-project",
+  "version": "1.0.0",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js",
+    "build": "echo \"Error: npm run build not implemented\" && exit 0"
+  },
+  "type": "module",
+  "author": "Marius Genton",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@heroicons/react": "^2.2.0"
+  }
+}

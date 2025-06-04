@@ -1,0 +1,109 @@
+import { createClient } from 'redis';
+
+let redisClient = null;
+
+async function getRedisClient() {
+  if (!redisClient) {
+    console.log('Creating new Redis client');
+    redisClient = createClient({
+        socket: {
+            host: process.env.REDIS_HOST,
+            port: process.env.REDIS_PORT
+        }
+    });
+    
+    redisClient.on('error', err => {
+      console.error('Redis Client Error:', err);
+      redisClient = null; // Reset the client on error
+    });
+    
+    await redisClient.connect();
+    console.log('Connected to Redis successfully');
+  }
+  
+  return redisClient;
+}
+
+export async function fetchEventsFromCache(date) {
+    const key = `events:${date}:all`;
+
+    try {
+        const client = await getRedisClient();
+
+        console.log(`Attempting to fetch events on ${date} from cache`);
+        const data = await client.get(key);
+
+        if (data && JSON.parse(data)) {
+            console.log('Cache hit');
+            return JSON.parse(data);
+        } else {
+            console.log('Cache miss');
+            return null;
+        }
+
+    } catch(e) {
+        console.error(`Error fetching from Redis:`, e);
+        return null;
+    }
+}
+
+export async function cacheEvents(date, events, expiration = 300) {
+    const key = `events:${date}:all`;
+
+    try {
+        const client = await getRedisClient();
+
+        console.log(`Writing ${events.length} to cache for ${date}`);
+        await client.set(key, JSON.stringify(events), { EX: expiration });
+        console.log(`Cache updated.`);
+
+        return true;
+
+    } catch(e) {
+        console.error(`Error caching to Redis:`, e);
+        return false;
+    }
+}
+
+export async function fetchEventDetailsFromCache(eventId) {
+    const key = `events:${eventId}`;
+
+    try {
+        const client = await getRedisClient();
+
+        console.log(`Attempting to fetch details for event ${eventId} from cache`);
+        const data = await client.get(key);
+
+        if (data && JSON.parse(data)) {
+            console.log('Cache hit');
+            return JSON.parse(data);
+        } else {
+            console.log('Cache miss');
+            return null;
+        }
+
+    } catch(e) {
+        console.error(`Error fetching from Redis:`, e);
+        return null;
+    }
+}
+
+export async function cacheEventDetails(event, expiration = 300) {
+    const key = `events:${event.id}`;
+
+    try {
+        const client = await getRedisClient();
+
+        console.log(`Updating cache for event ${event.event_id}`);
+        await client.set(key, JSON.stringify(event), { EX: expiration });
+        console.log('Cache updated');
+
+        return true;
+
+    } catch(e) {
+        console.error(`Error caching to Redis:`, e);
+        return false;
+    }
+}
+
+export default { fetchEventsFromCache, cacheEvents, fetchEventDetailsFromCache, cacheEventDetails };
