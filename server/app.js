@@ -6,10 +6,10 @@ import authRoutes from './rest/auth.js';
 import apiRoutes from './rest/api.js';
 
 const app = express();
-const port = 6000;
+const port = 1919;
 
 app.use(express.json());
-app.use(cors());
+app.use(cors({ origin: 'http://localhost:2000', credentials: true }));
 
 app.use('/auth', authRoutes);
 app.use('/api', apiRoutes);

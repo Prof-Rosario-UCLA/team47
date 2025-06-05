@@ -1,6 +1,7 @@
 import { useState } from 'react';
 
 export default function CreateUserComponent({ onSuccess }) {
+    const [name, setName] = useState('');
     const [values, setValues] = useState({ name: '', email: '', password: '', confirm: '' });
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -26,7 +27,7 @@ export default function CreateUserComponent({ onSuccess }) {
         setLoading(true);
 
         try {
-            const res = await fetch('/auth/register', {
+            const res = await fetch('http://localhost:1919/auth/register', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 credentials: 'include',
@@ -53,13 +54,39 @@ export default function CreateUserComponent({ onSuccess }) {
     }
 
     return (
-        <form onSubmit={handleSubmit}>
-            <input name="name" placeholder="Name" value={values.name} onChange={handleChange} required/>
-            <input name="email" placeholder="Email" value={values.email} onChange={handleChange} required/>
-            <input name="password" placeholder="Password" values={values.password} onChange={handleChange} required/>
-            <input name="confirm" placeholder="Confirm Password" values={values.confirm} onChange={handleChange} required/>
-            <button type="submit" disabled={loading}>{loading ? 'Loading...' : 'Sign up'}</button>
-            {error && <p>{error}</p>}
-        </form>
+        <div className="min-h-screen flex items-center justify-center bg-gray-50">
+            <div className="w-full max-w-sm space-y-8 p-8 bg-white rounded-xl shadow-lg">
+                <h2 className="text-center text-3xl font-semibold text-gray-900">Sign Up</h2>
+
+                <form onSubmit={handleSubmit} className="mt-4 space-y-6">
+                    <div className="space-y-4">
+                        <label className="block">
+                            <span className="text-sm font-medium text-gray-700">Name</span>
+                            <input type="name" value={name} onChange={(e) => setName(e.target.value)} placeholder="Tim Apple" className="mt-1 block w-full rounded-md bg-gray-100 border border-gray-300 px-3 py-2 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" required/>
+                        </label>
+
+                        <label className="block">
+                            <span className="text-sm font-medium text-gray-700">Email</span>
+                            <input type="email" value={values.email} onChange={handleChange} placeholder="you@example.com" className="mt-1 block w-full rounded-md bg-gray-100 border border-gray-300 px-3 py-2 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" required/>
+                        </label>
+
+                        <label className="block">
+                            <span className="text-sm font-medium text-gray-700">Password</span>
+                            <input type="password" value={values.password} onChange={handleChange} placeholder="••••••" className="mt-1 block w-full rounded-md bg-gray-100 border border-gray-300 px-3 py-2 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" required/>
+                        </label>
+
+                        <label className="block">
+                            <span className="text-sm font-medium text-gray-700">Confirm Password</span>
+                            <input type="password" value={values.confirm} onChange={handleChange} placeholder="••••••" className="mt-1 block w-full rounded-md bg-gray-100 border border-gray-300 px-3 py-2 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" required/>
+                        </label>
+                    </div>
+
+                    <button type="submit" disabled={loading} className="w-full flex justify-center py-2 px-4 border border-transparent rounded-lg shadow-sm text-white text-lg font-medium bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 focus:outline-none focus:ring-2 focus: ring-offset-2 focus:ring-indigo-500">{loading ? "Loading..." : "Sign Up"}</button>
+                    {error && (
+                        <p className="mt-2 text-center text-sm text-red-600">{error}</p>
+                    )}
+                </form>
+            </div>
+        </div>
     );
 }
