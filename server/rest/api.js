@@ -1,6 +1,6 @@
 import express from 'express';
-import { createEvent, getEvents, getUserForSession } from '../../utils/db';
-import { cacheEvents, fetchEventsFromCache } from '../../utils/redis';
+import { createEvent, getEvents, getUserForSession } from '../utils/db.js';
+import { cacheEvents, fetchEventsFromCache } from '../utils/redis.js';
 const router = express.Router();
 
 

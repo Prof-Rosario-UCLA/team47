@@ -1,4 +1,4 @@
-import { mysql_db } from "./mysql-config";
+import { mysql_db } from "./mysql-config.js";
 
 export async function userExists(email) {
     if (!email) throw new Error('Missing email');
