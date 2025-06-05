@@ -54,7 +54,7 @@ router.post('/login', async (req, res) => {
 });
 
 router.get('/user', async (req, res) => {
-    const token = res.cookie?.sid;
+    const token = req.cookies?.sid;
     if (!token) res.status(401).send({ msg: 'Not Authenticated' });
 
     try {
@@ -69,7 +69,7 @@ router.get('/user', async (req, res) => {
 });
 
 router.post('/logout', async (req,res) => {
-    const token = res.cookie?.sid;
+    const token = req.cookies?.sid;
     if (token) await destroySession(token);
     res.clearCookie('sid', { httpOnly: true, secure: true, sameSite: 'strict' });
     res.sendStatus(204);
