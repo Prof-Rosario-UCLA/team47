@@ -17,8 +17,7 @@ export default function LoginComponent({ onSuccess }) {
         });
 
         if (res.ok) {
-            const user = await fetch('/api/user', { credentials: 'include' });
-            onSuccess(await user.json());
+            onSuccess(await res.json());
         } else {
             setError('Invalid credentials');
         }

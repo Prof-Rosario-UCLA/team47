@@ -1,5 +1,88 @@
 import { mysql_db } from "./mysql-config";
 
+export async function userExists(email) {
+    if (!email) throw new Error('Missing email');
+
+    try {
+        const user = await mysql_db.getOne('SELECT email FROM users WHERE email = ?', [email]);
+        if (user) return true;
+        else return false;
+
+    } catch(e) {
+        console.error(`An error occurred while checking for user existence:`, e);
+        throw e;
+    }
+}
+
+export async function createUser(name, email, passwordHash) {
+    if (!name) throw new Error('Missing name');
+    if (!email) throw new Error('Missing email');
+    if (!passwordHash) throw new Error('Missing password hash');
+
+    try {
+        const uid = await mysql_db.insert('INSERT INTO users (name, email, password_hash) VALUES (?,?,?)', [name, email, passwordHash]);
+        const user = await mysql_db.getOne('SELECT uid, name, email FROM users WHERE uid = ?', [uid]);
+        return user;
+
+    } catch(e) {
+        console.error('An error occurred while creating a user:', e);
+        throw e;
+    }
+}
+
+export async function getUser(email) {
+    if (!email) throw new Error('Missing email');
+
+    try {
+        const user = await mysql_db.getOne('SELECT uid, name, email, password_hash AS passwordHash FROM users WHERE email = ? AND', [email]);
+        return user;
+
+    } catch(e) {
+        console.error('An error occurred while fetching a user:', e);
+        throw e;
+    }
+}
+
+export async function getUserForSession(token) {
+    if (!token) throw new Error('Missing token');
+
+    try {
+        const user = await mysql_db.getOne('SELECT u.uid, u.name, u.email FROM session s INNER JOIN users u ON s.uid = u.uid WHERE s.token = ?', [token]);
+        return user;
+        
+    } catch(e) {
+        console.error('An error occurred while getting a user for session:', e);
+        throw e;
+    }
+}
+
+export async function createSession(uid) {
+    if (!uid) throw new Error('Missing uid');
+
+    try {
+        const token = crypto.randomUUID();
+        await mysql_db.insert('INSERT INTO sessions (uid, token) VALUES (?,?)', [uid, token]);
+        return token;
+
+    } catch(e) {
+        console.error('An error occurred while creating a session:', e);
+        throw e;
+    }
+}
+
+export async function destroySession(token) {
+    if (!token) throw new Error('Missing token');
+
+    try {
+        await mysql_db.do('DELETE FROM sessions WHERE token = ?', [token]);
+        return;
+
+    } catch(e) {
+        console.error('An error occurred while destroying session:', e);
+        throw e;
+    }
+}
+
 export async function getEvents(date) {
     if (date.length !== 10) throw new Error(`Invalid date: ${date}`);
 
@@ -48,5 +131,6 @@ export default { getEvents, createEvent, getEventDetails };
 //     name VARCHAR(40) NOT NULL,
 //     date VARCHAR(10) NOT NULL,
 //     description VARCHAR(500) NOT NULL,
-//     host VARCHAR(20) NOT NULL
+//     host VARCHAR(20) NOT NULL,
+//     location VARCHAR(50) NOT NULL
 // );

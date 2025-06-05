@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-export default function CreaeUserComponent({ onSuccess }) {
+export default function CreateUserComponent({ onSuccess }) {
     const [values, setValues] = useState({ name: '', email: '', password: '', confirm: '' });
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
