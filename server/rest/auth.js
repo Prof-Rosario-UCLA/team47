@@ -6,8 +6,8 @@ const router = express.Router();
 function setSessionCookie(res, token) {
     res.cookie('sid', token, {
         httpOnly: true,
-        secure: true,
-        sameSite: 'strict',
+        secure: false,
+        sameSite: 'lax',
         maxAge: 7*24*60*60*1000
     });
 }
@@ -17,7 +17,7 @@ router.post('/register', async (req, res) => {
     if (!email) return res.status(400).send({ msg: 'Missing email' });
     if (!name) return res.status(400).send({ msg: 'Missing name' });
     if (!password) return res.status(400).send({ msg: 'Missing password' });
-    if (password.length < 8) return res.status(400).send({ msg: 'Password too short' });
+    if (password.length < 5) return res.status(400).send({ msg: 'Password too short' });
 
     try {
         if (await userExists(email)) return res.status(409).send({ msg: 'This email is already linked to an account' });
@@ -44,7 +44,7 @@ router.post('/login', async (req, res) => {
         const correctPassword = await bcrypt.compare(password, user.passwordHash);
         if (!correctPassword) return res.status(413).send({ msg: 'Invalid credentials' });
         const token = await createSession(user.uid);
-        res.cookie('sid', token, { httpOnly: true, secure: true, sameSite: 'strict', maxAge: 7*24*60*60*1000 });
+        setSessionCookie(res, token);
         return res.status(200).send({ uid: user.uid, name: user.name, email: user.email });
     
     } catch (error) {
@@ -55,7 +55,7 @@ router.post('/login', async (req, res) => {
 
 router.get('/user', async (req, res) => {
     const token = req.cookies?.sid;
-    if (!token) res.status(401).send({ msg: 'Not Authenticated' });
+    if (!token) return res.status(401).send({ msg: 'Not Authenticated' });
 
     try {
         const user = await getUserForSession(token);
@@ -71,7 +71,7 @@ router.get('/user', async (req, res) => {
 router.post('/logout', async (req,res) => {
     const token = req.cookies?.sid;
     if (token) await destroySession(token);
-    res.clearCookie('sid', { httpOnly: true, secure: true, sameSite: 'strict' });
+    res.clearCookie('sid', { httpOnly: true, secure: false, sameSite: 'lax' });
     res.sendStatus(204);
 });
 

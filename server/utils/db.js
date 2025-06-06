@@ -47,7 +47,7 @@ export async function getUserForSession(token) {
     if (!token) throw new Error('Missing token');
 
     try {
-        const user = await mysql_db.getOne('SELECT u.uid, u.name, u.email FROM session s INNER JOIN users u ON s.uid = u.uid WHERE s.token = ?', [token]);
+        const user = await mysql_db.getOne('SELECT u.uid, u.name, u.email FROM sessions s INNER JOIN users u ON s.uid = u.uid WHERE s.token = ?', [token]);
         return user;
         
     } catch(e) {

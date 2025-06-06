@@ -17,8 +17,8 @@ export default function CreateUserComponent({ onSuccess }) {
             return;
         }
 
-        if (password.length < 8) {
-            setError('Password must be at least 8 characters');
+        if (password.length < 5) {
+            setError('Password must be at least 5 characters');
             return;
         }
 
