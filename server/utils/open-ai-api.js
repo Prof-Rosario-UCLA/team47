@@ -1,4 +1,4 @@
-import { config } from 'dotenv'; config({ path: '../.env' });
+import { config } from 'dotenv'; config({ path: 'server/.env' });
 import axios from 'axios';
 
 export async function summarizeEvents(events) {

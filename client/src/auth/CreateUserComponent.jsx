@@ -2,24 +2,22 @@ import { useState } from 'react';
 
 export default function CreateUserComponent({ onSuccess }) {
     const [name, setName] = useState('');
-    const [values, setValues] = useState({ name: '', email: '', password: '', confirm: '' });
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirm, setConfirm] = useState('');
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
-
-    function handleChange(e) {
-        setValues(v => ({ ...v, [e.target.name]: e.target.value }));
-    }
 
     async function handleSubmit(e) {
         e.preventDefault();
         setError(null);
 
-        if (values.password !== values.confirm) {
+        if (password !== confirm) {
             setError('Passwords do not match');
             return;
         }
 
-        if (values.password.length < 8) {
+        if (password.length < 8) {
             setError('Password must be at least 8 characters');
             return;
         }
@@ -32,9 +30,9 @@ export default function CreateUserComponent({ onSuccess }) {
                 headers: { 'Content-Type': 'application/json' },
                 credentials: 'include',
                 body: JSON.stringify({
-                    name: values.name.trim(),
-                    email: values.email.trim(),
-                    password: values.password
+                    name: name.trim(),
+                    email: email.trim(),
+                    password: password
                 })
             });
 
@@ -47,6 +45,7 @@ export default function CreateUserComponent({ onSuccess }) {
             }
 
         } catch(err) {
+            console.error(err);
             setError('Network error');
         } finally {
             setLoading(false);
@@ -67,17 +66,17 @@ export default function CreateUserComponent({ onSuccess }) {
 
                         <label className="block">
                             <span className="text-sm font-medium text-gray-700">Email</span>
-                            <input type="email" value={values.email} onChange={handleChange} placeholder="you@example.com" className="mt-1 block w-full rounded-md bg-gray-100 border border-gray-300 px-3 py-2 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" required/>
+                            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" className="mt-1 block w-full rounded-md bg-gray-100 border border-gray-300 px-3 py-2 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" required/>
                         </label>
 
                         <label className="block">
                             <span className="text-sm font-medium text-gray-700">Password</span>
-                            <input type="password" value={values.password} onChange={handleChange} placeholder="••••••" className="mt-1 block w-full rounded-md bg-gray-100 border border-gray-300 px-3 py-2 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" required/>
+                            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••" className="mt-1 block w-full rounded-md bg-gray-100 border border-gray-300 px-3 py-2 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" required/>
                         </label>
 
                         <label className="block">
                             <span className="text-sm font-medium text-gray-700">Confirm Password</span>
-                            <input type="password" value={values.confirm} onChange={handleChange} placeholder="••••••" className="mt-1 block w-full rounded-md bg-gray-100 border border-gray-300 px-3 py-2 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" required/>
+                            <input type="password" value={confirm} onChange={(e) => setConfirm(e.target.value)} placeholder="••••••" className="mt-1 block w-full rounded-md bg-gray-100 border border-gray-300 px-3 py-2 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" required/>
                         </label>
                     </div>
 

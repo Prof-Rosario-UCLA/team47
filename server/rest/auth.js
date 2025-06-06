@@ -1,5 +1,5 @@
 import express from 'express';
-import { createSession, destroySession, getUser, userExists } from '../utils/db.js';
+import { createSession, destroySession, getUser, userExists, createUser, getUserForSession } from '../utils/db.js';
 import bcrypt from 'bcryptjs';
 const router = express.Router();
 

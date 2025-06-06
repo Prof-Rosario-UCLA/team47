@@ -1,4 +1,4 @@
-import { mysql_db } from "./mysql-config.js";
+import mysql_db from "./mysql-config.js";
 
 export async function userExists(email) {
     if (!email) throw new Error('Missing email');
@@ -133,4 +133,16 @@ export default { getEvents, createEvent, getEventDetails };
 //     description VARCHAR(500) NOT NULL,
 //     host VARCHAR(20) NOT NULL,
 //     location VARCHAR(50) NOT NULL
+// );
+
+// CREATE TABLE users (
+//     uid INT PRIMARY KEY AUTO_INCREMENT,
+//     email VARCHAR(100) NOT NULL,
+//     password_hash TEXT NOT NULL,
+//     name VARCHAR(100) NOT NULL
+// );
+
+// CREATE TABLE sessions (
+//     token VARCHAR(500) PRIMARY KEY,
+//     uid INT NOT NULL REFERENCES users(uid) ON DELETE CASCADE
 // );

@@ -48,13 +48,5 @@ export default function LoginComponent({ onSuccess }) {
                 </form>
             </div>
         </div>
-
-
-        // <form onSubmit={handleSubmit}>
-        //     <input value={email} onChange={e => setEmail(e.target.value)} placeholder="email"/>
-        //     <input value={password} onChange={e => setPassword(e.target.value)} placeholder="password"/>
-        //     <button type="submit">Log in</button>
-        //     { error && <p>{error}</p> }
-        // </form>
     );
 }
