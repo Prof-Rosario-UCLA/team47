@@ -8,7 +8,7 @@ steps:
   - name: 'gcr.io/cloud-builders/npm'
     args: ['run', 'build'] # npm run build
 
-  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:slim'
-    args: ['app deploy', '--quiet'] # gcloud app deploy
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args: ['app', 'deploy', '--quiet'] # gcloud app deploy
 
 timeout: '900s'
