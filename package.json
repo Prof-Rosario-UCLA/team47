@@ -5,7 +5,7 @@
     "start": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
     "dev:server": "nodemon server/app.js",
     "build:server": "echo 'Nothing to build.'",
-    "dev:client": "parcel client/index.html --port 80",
+    "dev:client": "parcel client/index.html --port 2000",
     "build:client": "parcel build client/index.html --dist-dir client/dist",
     "build": "npm run build:client"
   },
