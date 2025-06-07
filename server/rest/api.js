@@ -5,29 +5,33 @@ const router = express.Router();
 
 
 router.get('/events', async (req, res) => {
-    const { date } = req.query;
-    if (!date || date.length !== 10) return res.status(400).send({ msg: 'Invalid date' });
+    const { day } = req.query;
+    if (!day || day.length !== 10) return res.status(400).send({ msg: 'Invalid date' });
 
     try {
-        const cached = await fetchEventsFromCache(date);
+        const cached = await fetchEventsFromCache(day);
         if (cached) return res.status(200).send(cached);
 
-        const events = await getEvents(date);
-        await cacheEvents(date, events);
+        const events = await getEvents(day);
+        await cacheEvents(day, events);
         return res.status(200).send(events);
 
     } catch (error) {
-        console.error("Error in /register route:", error);
+        console.error("Error in /events route:", error);
         res.status(500).json({ error: "Internal server error" });
     }
 });
 
 router.post('/event', async (req, res) => {
-    const { name, date, description, host } = req.body;
+    const { name, location, day, time, description, host, image_url } = req.body;
     if (!name) return res.status(400).send({ msg: 'Missing name' });
-    if (!date) return res.status(400).send({ msg: 'Missing date' });
+    if (!location) return res.status(400).send({ msg: 'Missing location' });
+    if (!day) return res.status(400).send({ msg: 'Missing date' });
+    if (!time) return res.status(400).send({ msg: 'Missing time' });
     if (!description) return res.status(400).send({ msg: 'Missing description' });
     if (!host) return res.status(400).send({ msg: 'Missing host' });
+    if (day.length !== 10) return res.status(400).send({ msg: 'Invalid day' });
+    if (time.length !== 5) return res.status(400).send({ msg: 'Invalid time' });
 
     const token = req.cookies?.sid;
     if (!token) return res.status(401).json({ msg: 'Not authenticated' });
@@ -38,11 +42,11 @@ router.post('/event', async (req, res) => {
         const user = await getUserForSession(token);
         if (!user) return res.status(400).send({ msg: 'Session expired' });
 
-        await createEvent(name, date, description, host);
+        await createEvent(name, location, day, time, description, host, image_url);
 
-        // Refresh cached events
-        const events = await getEvents(date);
-        await cacheEvents(date, events);
+        // Update cached events
+        const events = await getEvents(day);
+        await cacheEvents(day, events);
 
         res.sendStatus(200);
 

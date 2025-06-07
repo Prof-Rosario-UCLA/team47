@@ -83,11 +83,12 @@ export async function destroySession(token) {
     }
 }
 
-export async function getEvents(date) {
-    if (date.length !== 10) throw new Error(`Invalid date: ${date}`);
+export async function getEvents(day) {
+    if (!day) throw new Error('Missing day');
+    if (day.length !== 10) throw new Error('Invalid day');
 
     try {
-        const events = await mysql_db.do('SELECT event_id, name, date, decription, host FROM events WHERE date = ?', [date]);
+        const events = await mysql_db.do('SELECT event_id, name, day, time, description, host FROM events WHERE day = ?', [day]);
         return events;
 
     } catch(e) {
@@ -96,11 +97,13 @@ export async function getEvents(date) {
     }
 }
 
-export async function createEvent(name, date, description, host) {
-    if (!name || !date || !description || !host) throw new Error('Invalid parameters for event creation');
+export async function createEvent(name, location, day, time, description, host, image_url) {
+    if (!name || !location || !day || !time || !description || !host) throw new Error('Invalid parameters for event creation');
+    if (day.length !== 10) throw new Error('Invalid day');
+    if (time.length !== 5) throw new Error('Invalid time');
 
     try {
-        const eventId = await mysql_db.insert('INSERT INTO events (name, date, description, host) VALUES (?,?,?,?)', [name, date, description, host]);
+        const eventId = await mysql_db.insert('INSERT INTO events (name, location, day, time, description, host, image_url) VALUES (?,?,?,?,?,?,?)', [name, location, day, time, description, host, image_url]);
         const event = await getEventDetails(eventId);
         return event;
 
@@ -129,10 +132,12 @@ export default { getEvents, createEvent, getEventDetails };
 // CREATE TABLE events (
 //     event_id INT PRIMARY KEY AUTO_INCREMENT,
 //     name VARCHAR(40) NOT NULL,
-//     date VARCHAR(10) NOT NULL,
+//     day VARCHAR(10) NOT NULL,
+//     time VARCHAR(5) NOT NULL,
 //     description VARCHAR(500) NOT NULL,
 //     host VARCHAR(20) NOT NULL,
-//     location VARCHAR(50) NOT NULL
+//     location VARCHAR(50) NOT NULL,
+//     image_url VARCHAR(500) NULL
 // );
 
 // CREATE TABLE users (
