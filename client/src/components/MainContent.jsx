@@ -113,7 +113,7 @@ export default function MainContent({ user, setUser }) {
                         ? <div className="text-gray-600 font-semibold">Loading</div>
                         : (
                             <div className="grid grid-cols-4 gap-4">
-                                { events?.map(evt => <EventSummary event={evt}/> )}
+                                { events?.map(evt => <EventSummary key={evt.event_id} event={evt}/> )}
                             </div>
                         )
                 }
