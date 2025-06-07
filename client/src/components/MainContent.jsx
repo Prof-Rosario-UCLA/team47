@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import EventComposer from "./EventComposer";
 import { format } from "date-fns";
+import EventSummary from "./EventSummary";
 
 export default function MainContent({ user, setUser }) {
     const [addingEvent, setAddingEvent] = useState(false);
@@ -48,7 +49,6 @@ export default function MainContent({ user, setUser }) {
             });
 
             if (res.ok) {
-                console.log(await res.json())
                 setEvents(await res.json());
             } else {
                 console.log(await res.json());
@@ -105,8 +105,18 @@ export default function MainContent({ user, setUser }) {
                 <input type="text" placeholder="Search" className="mt-4 w-72 md:w-96 px-4 py-2 rounded-full border border-gray-300 bg-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"/>
             </div>
 
-            <div className="flex-1 m-6 border border-gray-300 bg-gray-200 flex items-center justify-center">
-                <div className="text-gray-600 font-semibold">Content</div>
+            <div className="flex-1 bg-gray-200 border border-gray-300 px-6 pt-6 pb-0 overflow-y-auto">
+                {
+                    error 
+                    ? <div className="text-red-600">{error}</div>
+                    : loading 
+                        ? <div className="text-gray-600 font-semibold">Loading</div>
+                        : (
+                            <div className="grid grid-cols-4 gap-4">
+                                { events?.map(evt => <EventSummary event={evt}/> )}
+                            </div>
+                        )
+                }
             </div>
 
             {
