@@ -6,6 +6,7 @@ import ReactDOM from "react-dom/client";
 import CreateUserComponent from "./auth/CreateUserComponent";
 import LoginComponent from "./auth/LoginComponent";
 import MainContent from "./components/MainContent";
+import CookieBanner from "./components/CookieBanner";
 
 function App() {
     const { user, setUser, loading } = useAuth();
@@ -34,5 +35,6 @@ ReactDOM
     .render(
         <AuthProvider>
             <App/>
+            <CookieBanner/>
         </AuthProvider>
     );

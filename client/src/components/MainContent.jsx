@@ -4,7 +4,14 @@ export default function MainContent({ user, setUser }) {
     const [addingEvent, setAddingEvent] = useState(false);
     const [events, setEvents] = useState(null);
     const [selectedEvent, setSelectedEvent] = useState(null);
-
+    const [error, setError] = useState(null);
+    const [uploadError, setUploadError] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [uploading, setUploading] = useState(false);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [filteredEvents, setFilteredEvents] = useState(null);
+    const [newEventData, setNewEventData] = useState({ name: '', dateTime: Date.now(), location: '' });
+ 
     async function signOut() {
         try {
             const res = await fetch('http://localhost:1919/auth/logout', {
@@ -23,24 +30,65 @@ export default function MainContent({ user, setUser }) {
     }
 
     async function getEvents() {
+        setLoading(true);
+        setError(null);
+        setSearchTerm("");
+
         try {
+            const res = await fetch('http://localhost:1919/api/events', {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include'
+            });
+
+            if (res.ok) {
+                setEvents(await res.json());
+            } else {
+                setError((await res.json()).msg);
+            }
 
         } catch(e) {
-
+            setError("Network error");
+        } finally {
+            setLoading(false);
         }
     }
 
     async function addEvent() {
+        setUploading(true);
+        setUploadError(null);
+
         try {
+            const res = await fetch('http://localhost:1919/api/event', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: {
+
+                },
+                credentials: 'include'
+            });
+
+            if (res.ok) {
+                setAddingEvent(false);
+                await getEvents();
+
+            } else {
+                setAddingEvent(false);
+                setUploadError((await res.json()).msg);
+            }
 
         } catch(e) {
-
+            setError("Network error");
+        } finally {
+            setUploading(false);
         }
-    } 
+    }
 
-    useEffect(() => {
+    function updateSearch() {
 
-    }, []);
+    }
+
+    useEffect(() => { getEvents() }, []);
 
     return (
         <div className="h-screen w-screen flex flex-col overflow-hidden bg-white">
@@ -85,7 +133,7 @@ export default function MainContent({ user, setUser }) {
                             <form className="space-y-4">
                                 <div>
                                     <label className="block text-gray-700">Event Title</label>
-                                    <input type="text" placeholder="e.g. Undie Run" className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" required/>
+                                    <input type="text" value={newEventData.name} onChange={(e) => { newEventData.name = e.target.value }} placeholder="e.g. Undie Run" className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" required/>
                                 </div>
 
                                 <div>
@@ -98,8 +146,8 @@ export default function MainContent({ user, setUser }) {
                                     <input type="text" placeholder="e.g. Wilson Plaza" className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" required/>
                                 </div>
 
-                                <button onClick={() => {}} type="submit" className="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                    Save Event
+                                <button onClick={() => addEvent()} type="submit" disabled={uploading} className="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                    {uploading ? "Uploading..." : "Create Event"}
                                 </button>
                             </form>
 
