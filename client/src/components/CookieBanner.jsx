@@ -15,7 +15,7 @@ export default function CookieBanner() {
     if (!visible) return null;
 
     return (
-        <aside role="region" aria-label="Cookie consent banner" aria-live="polite" aria-hidden={visible ? "false" : "true"} className="fixed bottom-0 inset-x-0 z-50 bg-gray-900 text-gray-100">
+        <aside role="region" aria-label="Cookie consent banner" aria-live="polite" aria-hidden={!visible} className="fixed bottom-0 inset-x-0 z-50 bg-gray-900 text-gray-100">
             <div className="max-w-4xl mx-auto px-4 py-3 flex flex-col sm:flex-row sm:items-center gap-4">
                 <p className="text-sm flex-1">
                     We use <strong>essential cookies only</strong> to keep you signed-in and secure. These cookies are required for BruinEvents to work.

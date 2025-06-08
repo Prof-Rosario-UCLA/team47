@@ -62,25 +62,25 @@ export default function CreateUserComponent({ onSuccess, onBack }) {
 
                 <form aria-labelledby="signup-heading" aria-describedby={error ? 'signup-error' : undefined} onSubmit={handleSubmit} className="mt-4 space-y-6">
                     <div className="space-y-4">
-                        <fieldset className="block">
-                            <legend className="text-sm font-medium text-gray-700">Name</legend>
-                            <input type="name" value={name} onChange={(e) => setName(e.target.value)} placeholder="Tim Apple" className="mt-1 block w-full rounded-md bg-gray-100 border border-gray-300 px-3 py-2 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" required/>
-                        </fieldset>
+                        <div className="block">
+                            <label htmlFor="user-name" className="text-sm font-medium text-gray-700">Name</label>
+                            <input id="user-name" type="name" value={name} onChange={(e) => setName(e.target.value)} placeholder="Tim Apple" className="mt-1 block w-full rounded-md bg-gray-100 border border-gray-300 px-3 py-2 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" required/>
+                        </div>
 
-                        <fieldset className="block">
-                            <legend className="text-sm font-medium text-gray-700">Email</legend>
-                            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" className="mt-1 block w-full rounded-md bg-gray-100 border border-gray-300 px-3 py-2 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" required/>
-                        </fieldset>
+                        <div className="block">
+                            <label htmlFor="user-email" className="text-sm font-medium text-gray-700">Email</label>
+                            <input id="user-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" className="mt-1 block w-full rounded-md bg-gray-100 border border-gray-300 px-3 py-2 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" required/>
+                        </div>
 
-                        <fieldset className="block">
-                            <legend className="text-sm font-medium text-gray-700">Password</legend>
-                            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••" className="mt-1 block w-full rounded-md bg-gray-100 border border-gray-300 px-3 py-2 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" required/>
-                        </fieldset>
+                        <div className="block">
+                            <label htmlFor="user-password" className="text-sm font-medium text-gray-700">Password</label>
+                            <input id="user-password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••" className="mt-1 block w-full rounded-md bg-gray-100 border border-gray-300 px-3 py-2 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" required/>
+                        </div>
 
-                        <fieldset className="block">
-                            <legend className="text-sm font-medium text-gray-700">Confirm Password</legend>
-                            <input type="password" value={confirm} onChange={(e) => setConfirm(e.target.value)} placeholder="••••••" className="mt-1 block w-full rounded-md bg-gray-100 border border-gray-300 px-3 py-2 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" required/>
-                        </fieldset>
+                        <div className="block">
+                            <label htmlFor="user-confirm" className="text-sm font-medium text-gray-700">Confirm Password</label>
+                            <input id="user-confirm" type="password" value={confirm} onChange={(e) => setConfirm(e.target.value)} placeholder="••••••" className="mt-1 block w-full rounded-md bg-gray-100 border border-gray-300 px-3 py-2 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" required/>
+                        </div>
                     </div>
 
                     <button type="submit" disabled={loading} aria-busy={loading} className="w-full flex justify-center py-2 px-4 border border-transparent rounded-lg shadow-sm text-white text-lg font-medium bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 focus:outline-none focus:ring-2 focus: ring-offset-2 focus:ring-indigo-500">{loading ? "Loading..." : "Sign Up"}</button>

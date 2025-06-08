@@ -89,11 +89,11 @@ export default function MainContent({ user, setUser }) {
                 <h1 className="text-white text-2xl font-bold">BruinEvents</h1>
                 
                 <div className="space-x-2">
-                    <button onClick={() => setAddingEvent(true)} className="px-4 py-2 rounded-lg bg-white text-blue-600 font-medium shadow-sm hover:bg-gray-100 focus:outline-none focus:ring-offset-2 focus:ring-indigo-500">
+                    <button onClick={() => setAddingEvent(true)} className="px-4 py-2 rounded-lg bg-white text-blue-600 font-medium shadow-sm hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-600">
                         Add Event
                     </button>
 
-                    <button onClick={signOut} className="px-4 py-2 rounded-lg bg-white text-blue-600 font-medium shadow-sm hover:bg-gray-100 focus:outline-none focus:ring-offset-2 focus:ring-indigo-500">
+                    <button onClick={signOut} className="px-4 py-2 rounded-lg bg-white text-blue-600 font-medium shadow-sm hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-600">
                         Sign Out
                     </button>
                 </div>
@@ -120,13 +120,13 @@ export default function MainContent({ user, setUser }) {
                         : (
                             <div className="flex flex-col">
                                 <p id="events-summary" aria-live="polite" className="w-full text-left mb-4">{eventsData?.summary}</p>
-                                <div id="event-list" role="list" aria-label="Event list" className="grid grid-cols-4 gap-4 items-stretch auto-rows-fr">
+                                <ul id="event-list" aria-label="Event list" className="grid grid-cols-4 gap-4 items-stretch auto-rows-fr">
                                     { (filteredEvents())?.map(evt => 
                                         <li key={evt.event_id}>
                                             <EventSummary event={evt} onClick={() => setSelectedEvent(evt)}/>
                                         </li>
                                     )}
-                                </div>
+                                </ul>
                             </div>
                             
                         )
@@ -135,7 +135,7 @@ export default function MainContent({ user, setUser }) {
 
             {
                 selectedEvent && (
-                    <dialog className="fixed inset-0 z-50 flex items-center justify-center" aria-modal="true">
+                    <dialog role="dialog" open className="fixed inset-0 z-50 flex items-center justify-center" aria-modal="true">
                         <div onClick={() => setSelectedEvent(null)} className="absolute inset-0 backdrop-blur-sm"/>
                         <EventDetails onClose={() => setSelectedEvent(null)} event={selectedEvent}/>
                     </dialog>
@@ -144,7 +144,7 @@ export default function MainContent({ user, setUser }) {
 
             {
                 addingEvent && (
-                    <dialog className="fixed inset-0 z-50 flex items-center justify-center" aria-modal="true">
+                    <dialog role="dialog" open className="fixed inset-0 z-50 flex items-center justify-center" aria-modal="true">
                         <div onClick={() => setAddingEvent(false)} className="absolute inset-0 backdrop-blur-sm"/>
                         <EventComposer onClose={() => setAddingEvent(false)} onSuccess={onEventCreationSuccess}/>
                     </dialog>
