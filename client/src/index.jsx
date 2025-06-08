@@ -25,18 +25,25 @@ function App() {
         if (mode === 'login') return <LoginComponent onSuccess={onAuth} onBack={() => setMode('buttons')}/>
         if (mode === 'register') return <CreateUserComponent onSuccess={onAuth} onBack={() => setMode('buttons')}/>;
         return (
-            <div className="min-h-screen flex items-center justify-center bg-gray-50">
+            <section role="region" aria-labelledby="auth-heading" className="min-h-screen flex items-center justify-center bg-gray-50">
+                <h1 id="auth-heading" className="sr-only">Choose a way to authenticate</h1>
+
                 <div className="flex flex-col items-stretch space-y-4 w-fit px-4">
                     <button type="button" onClick={() => setMode('login')} className="w-full flex justify-center py-2 px-8 border border-transparent rounded-lg shadow-sm text-white text-lg font-medium bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 focus:outline-none focus:ring-2 focus: ring-offset-2 focus:ring-indigo-500">Log In</button>
                     <button type="button" onClick={() => setMode('register')} className="w-full flex justify-center py-2 px-8 border border-transparent rounded-lg shadow-sm text-white text-lg font-medium bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 focus:outline-none focus:ring-2 focus: ring-offset-2 focus:ring-indigo-500">Sign Up</button>
                 </div>
-             </div>
+            </section>
+
         );
     }
 
     return <MainContent user={user} setUser={setUser}/>;
 }
 
+
+<div className="min-h-screen flex items-center justify-center bg-gray-50">
+
+</div>
 
 ReactDOM
     .createRoot(document.getElementById('root'))

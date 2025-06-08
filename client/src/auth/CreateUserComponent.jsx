@@ -56,11 +56,11 @@ export default function CreateUserComponent({ onSuccess, onBack }) {
         <div className="min-h-screen flex items-center justify-center bg-gray-50">
             <div className="w-full max-w-sm space-y-8 p-8 bg-white rounded-xl shadow-lg">
 
-                <button type="button" onClick={onBack} className="absolute top-4 left-4 text-gray-500 hover:text-gray-800 text-sm focus:outline-none">← Back</button>
+                <button aria-label="Go back" type="button" onClick={onBack} className="absolute top-4 left-4 text-gray-500 hover:text-gray-800 text-sm focus:outline-none">← Back</button>
 
-                <h2 className="text-center text-3xl font-semibold text-gray-900">Sign Up</h2>
+                <h2 id="signup-heading" className="text-center text-3xl font-semibold text-gray-900">Sign Up</h2>
 
-                <form onSubmit={handleSubmit} className="mt-4 space-y-6">
+                <form aria-labelledby="signup-heading" aria-describedby={error ? 'signup-error' : undefined} onSubmit={handleSubmit} className="mt-4 space-y-6">
                     <div className="space-y-4">
                         <label className="block">
                             <span className="text-sm font-medium text-gray-700">Name</span>
@@ -83,9 +83,9 @@ export default function CreateUserComponent({ onSuccess, onBack }) {
                         </label>
                     </div>
 
-                    <button type="submit" disabled={loading} className="w-full flex justify-center py-2 px-4 border border-transparent rounded-lg shadow-sm text-white text-lg font-medium bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 focus:outline-none focus:ring-2 focus: ring-offset-2 focus:ring-indigo-500">{loading ? "Loading..." : "Sign Up"}</button>
+                    <button type="submit" disabled={loading} aria-busy={loading} className="w-full flex justify-center py-2 px-4 border border-transparent rounded-lg shadow-sm text-white text-lg font-medium bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 focus:outline-none focus:ring-2 focus: ring-offset-2 focus:ring-indigo-500">{loading ? "Loading..." : "Sign Up"}</button>
                     {error && (
-                        <p role="alert" className="mt-2 text-center text-sm text-red-600">{error}</p>
+                        <p id="signup-error" role="alert" aria-live="assertive" className="mt-2 text-center text-sm text-red-600">{error}</p>
                     )}
                 </form>
             </div>

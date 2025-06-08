@@ -100,28 +100,28 @@ export default function MainContent({ user, setUser }) {
             </header>
 
             <div className="flex flex-col items-center bg-white py-6">
-                <div className="flex items-center space-x-4">
+                <nav aria-label="Change day" className="flex items-center space-x-4">
                     <button aria-label="Previous day" onClick={() => updateSelectedDate(-1)} className="bg-gray-200 hover:bg-gray-300 rounded-full w-7 h-7 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">&#8249;</button>
                     <span className="text-lg font-semibold text-gray-800">{formatDateDisplay(selectedDate)}</span>
                     <button aria-label="Next day" onClick={() => updateSelectedDate(+1)} className="bg-gray-200 hover:bg-gray-300 rounded-full w-7 h-7 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">&#8250;</button>
-                </div>
+                </nav>
 
                 <label htmlFor="event-search" className="sr-only">Search events</label>
-                <input id="event-search" aria-describedby="search-help" type="text" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} placeholder="Search" className="mt-4 w-72 md:w-96 px-4 py-2 rounded-full border border-gray-300 bg-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"/>
+                <input id="event-search" aria-describedby="search-help" aria-controls="event-list" type="text" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} placeholder="Search" className="mt-4 w-72 md:w-96 px-4 py-2 rounded-full border border-gray-300 bg-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"/>
                 <p id="search-help" className="sr-only">Enter keywords to filter events.</p>
             </div>
 
             <div className="flex-1 bg-gray-200 border border-gray-300 px-6 pt-6 pb-0 overflow-y-auto">
                 {
                     error 
-                    ? <div role="alert" className="text-red-600">{error}</div>
+                    ? <div role="alert" aria-live="assertive" className="text-red-600">{error}</div>
                     : loading 
-                        ? <div className="text-gray-600 font-semibold">Loading</div>
+                        ? <div role="status" aria-live="polite" aria-label="Loading events" className="text-gray-600 font-semibold">Loading...</div>
                         : (
                             <div className="flex flex-col">
-                                <p className="w-full text-left mb-4">{eventsData?.summary}</p>
-                                <div className="grid grid-cols-4 gap-4">
-                                    { (filteredEvents())?.map(evt => <EventSummary key={evt.event_id} event={evt} onClick={() => setSelectedEvent(evt)}/> )}
+                                <p id="events-summary" aria-live="polite" className="w-full text-left mb-4">{eventsData?.summary}</p>
+                                <div id="event-list" role="list" aria-label="Event list" className="grid grid-cols-4 gap-4 items-stretch auto-rows-fr">
+                                    { (filteredEvents())?.map(evt => <EventSummary key={evt.event_id} role="listitem" event={evt} onClick={() => setSelectedEvent(evt)}/>)}
                                 </div>
                             </div>
                             

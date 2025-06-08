@@ -83,10 +83,12 @@ export default function EventComposer({ onClose, onSuccess }) {
     }
 
     return (
-        <div role="dialog" aria-modal="true" aria-labelledby="composer-title" className="relative z-10 w-full max-w-lg bg-white rounded-lg shadow-xl p-6">
+        <div role="dialog" aria-modal="true" aria-labelledby="composer-title" aria-describedby="composer-instructions composer-error" className="relative z-10 w-full max-w-lg bg-white rounded-lg shadow-xl p-6">
             <button onClick={onClose} className="absolute top-4 right-4 text-gray-600 hover:text-gray-800 text-2xl font-bold focus:outline-none" aria-label="Close overlay">&times;</button>
 
-            <h2 id="composed-title" className="text-2xl font-semibold mb-4">Add New Event</h2>
+            <h2 id="composer-title" className="text-2xl font-semibold mb-4">Add New Event</h2>
+
+            <p id="composer-instructions" className="sr-only">Fill in name, date/time, location, description, host, and optionally add an image.</p>
 
             <form onSubmit={createEvent} aria-busy={uploading} className="space-y-4">
                 <div>
@@ -114,8 +116,8 @@ export default function EventComposer({ onClose, onSuccess }) {
                     <input id="event-host" type="text" value={eventHost} onChange={(e) => setEventHost(e.target.value)} placeholder="e.g. UCLA Triathlon" className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" required/>
                 </div>
 
-                <div {...getRootProps()} className={`mt-4 p-6 border-2 border-dashed rounded-lg text-center cursor-pointer ${isDragActive ? "border-indigo-500 bg-indigo-50" : "border-gray-300"}`}>
-                    <input {...getInputProps()} />
+                <button role="button" tabIndex={0} aria-label="Drag & drop an image or click to upload" {...getRootProps()} className={`mt-4 p-6 border-2 border-dashed rounded-lg text-center cursor-pointer ${isDragActive ? "border-indigo-500 bg-indigo-50" : "border-gray-300"}`}>
+                    <input {...getInputProps()} aria-hidden="true"/>
                         {isDragActive ? (
                             <p>Drop the image here …</p>
                         ) : (
@@ -127,14 +129,14 @@ export default function EventComposer({ onClose, onSuccess }) {
                         {eventImageUrl && (
                             <img src={eventImageUrl} alt="Preview" className="mt-2 mx-auto max-h-40 rounded"/>
                         )}
-                </div>
+                </button>
 
                 <button type="submit" disabled={uploading} className="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                     {uploading ? "Uploading..." : "Create Event"}
                 </button>
 
                 {error && (
-                    <p role="alert" className="mt-2 text-center text-sm text-red-600">{error}</p>
+                    <p id="composer-error" role="alert" aria-live="assertive" className="mt-2 text-center text-sm text-red-600">{error}</p>
                 )}
             </form>
 
