@@ -1,5 +1,5 @@
 import express from 'express';
-import { createEvent, getEvents, getUserForSession } from '../utils/db.js';
+import { createEvent, getEvents } from '../utils/db.js';
 import { cacheEvents, fetchEventsFromCache } from '../utils/redis.js';
 const router = express.Router();
 
@@ -38,10 +38,6 @@ router.post('/event', async (req, res) => {
 
 
     try {
-        // Authenticate user (this should ideally be in middleware, but this is the only endpoint that enforces authentication for now – hence why it's easier to have it here for now)
-        const user = await getUserForSession(token);
-        if (!user) return res.status(400).send({ msg: 'Session expired' });
-
         await createEvent(name, location, day, time, description, host, image_url);
 
         // Update cached events

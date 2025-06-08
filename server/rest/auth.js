@@ -1,10 +1,19 @@
+import dotenv from 'dotenv';
+dotenv.config({ path: 'server/.env' });
 import express from 'express';
-import { createSession, destroySession, getUser, userExists, createUser, getUserForSession } from '../utils/db.js';
+import { getUser, userExists, createUser, getUserByUid } from '../utils/db.js';
 import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 const router = express.Router();
 
-function setSessionCookie(res, token) {
-    res.cookie('sid', token, {
+const JWT_SECRET = process.env.JWT_SECRET;
+if (!JWT_SECRET) console.error('Missing JWT Secret');
+
+export function signToken(payload) { return jwt.sign(payload, JWT_SECRET, { expiresIn: '7d' }); }
+export function verifyToken(token) { return jwt.verify(token, JWT_SECRET); }
+
+function setTokenCookie(res, token) {
+    res.cookie('jwt_token', token, {
         httpOnly: true,
         secure: false,
         sameSite: 'lax',
@@ -19,12 +28,16 @@ router.post('/register', async (req, res) => {
     if (!password) return res.status(400).send({ msg: 'Missing password' });
     if (password.length < 5) return res.status(400).send({ msg: 'Password too short' });
 
+    console.log(email)
+
     try {
         if (await userExists(email)) return res.status(409).send({ msg: 'This email is already linked to an account' });
         const passwordHash = await bcrypt.hash(password, 12);
         const user = await createUser(email, name, passwordHash);
-        const token = await createSession(user.uid);
-        setSessionCookie(res, token);
+        
+        const token = signToken({ uid: user.uid });
+        setTokenCookie(res, token);
+
         return res.status(200).send(user);
 
     } catch (error) {
@@ -41,10 +54,13 @@ router.post('/login', async (req, res) => {
     try {
         if (!(await userExists(email))) return res.status(404).send({ msg: 'User not found' });
         const user = await getUser(email);
+
         const correctPassword = await bcrypt.compare(password, user.passwordHash);
         if (!correctPassword) return res.status(413).send({ msg: 'Invalid credentials' });
-        const token = await createSession(user.uid);
-        setSessionCookie(res, token);
+
+        const token = signToken({ uid: user.uid });
+        setTokenCookie(res, token);
+
         return res.status(200).send({ uid: user.uid, name: user.name, email: user.email });
     
     } catch (error) {
@@ -54,12 +70,23 @@ router.post('/login', async (req, res) => {
 });
 
 router.get('/user', async (req, res) => {
-    const token = req.cookies?.sid;
+    const token = req.cookies?.jwt_token;
     if (!token) return res.status(401).send({ msg: 'Not Authenticated' });
 
     try {
-        const user = await getUserForSession(token);
-        if (!user) return res.status(401).send({ msg: 'Session expired' });
+        let payload;
+
+        try {
+            payload = verifyToken(token);
+        } catch {
+            return res.status(401).send({ msg: 'Invalid or expired token' });
+        }
+
+        if (!payload.uid) return res.status(401).send({ msg: 'Invalid or expired token' });
+
+        const user = await getUserByUid(payload.uid);
+        if (!user) return res.status(404).send({ msg: 'User not found' });
+
         return res.status(200).send(user);
 
     } catch (error) {
@@ -69,9 +96,7 @@ router.get('/user', async (req, res) => {
 });
 
 router.post('/logout', async (req,res) => {
-    const token = req.cookies?.sid;
-    if (token) await destroySession(token);
-    res.clearCookie('sid', { httpOnly: true, secure: false, sameSite: 'lax' });
+    res.clearCookie('jwt_token', { httpOnly: true, secure: false, sameSite: 'lax' });
     res.sendStatus(204);
 });
 

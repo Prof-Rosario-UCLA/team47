@@ -18,13 +18,6 @@ model User {
   name            String
   email           String @unique
   passwordHash    String @map("password_hash")
-  sessions        Session[]
-}
-
-model Session {
-  token         String @id
-  uid           Int
-  user          User @relation(fields: [uid], references: [uid], onDelete: Cascade)
 }
 
 model Event {

@@ -47,45 +47,14 @@ export async function getUser(email) {
     }
 }
 
-export async function getUserForSession(token) {
-    if (!token) throw new Error('Missing token');
-
-    try {
-        const session = await prisma.session.findUnique({
-            where: { token },
-            include: { user: true }
-        });
-
-        return session?.user ?? null;
-        
-    } catch(e) {
-        console.error('An error occurred while getting a user for session:', e);
-        throw e;
-    }
-}
-
-export async function createSession(uid) {
+export async function getUserByUid(uid) {
     if (!uid) throw new Error('Missing uid');
 
     try {
-        const token = crypto.randomUUID();
-        await prisma.session.create({ data: { uid, token } });
-        return token;
-
+        return prisma.user.findUnique({ where: { uid }, select: { uid: true, name: true, email: true } });
+        
     } catch(e) {
-        console.error('An error occurred while creating a session:', e);
-        throw e;
-    }
-}
-
-export async function destroySession(token) {
-    if (!token) throw new Error('Missing token');
-
-    try {
-        await prisma.session.delete({ where: { token } });
-
-    } catch(e) {
-        console.error('An error occurred while destroying session:', e);
+        console.error('An error occurred while getting a user by uid:', e);
         throw e;
     }
 }
@@ -118,8 +87,6 @@ export async function createEvent(name, location, day, time, description, host, 
     }
 }
 
-export default { getEvents, createEvent };
-
 
 // CREATE TABLE events (
 //     event_id INT PRIMARY KEY AUTO_INCREMENT,
@@ -139,12 +106,6 @@ export default { getEvents, createEvent };
 //     password_hash TEXT NOT NULL,
 //     name VARCHAR(100) NOT NULL
 // );
-
-// CREATE TABLE sessions (
-//     token VARCHAR(500) PRIMARY KEY,
-//     uid INT NOT NULL REFERENCES users(uid) ON DELETE CASCADE
-// );
-
 
 // INSERT INTO events (name, day, time, description, host, location) VALUES
 //     ("Swim practice", "06-06-2025", "18:00", "Relays and sprints.", "UCLA Triathlon", "Student Acitvities Center"),
