@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import EventComposer from "./EventComposer";
 import { format } from "date-fns";
 import EventSummary from "./EventSummary";
+import EventDetails from "./EventDetails";
 
 export default function MainContent({ user, setUser }) {
     const [addingEvent, setAddingEvent] = useState(false);
@@ -113,11 +114,20 @@ export default function MainContent({ user, setUser }) {
                         ? <div className="text-gray-600 font-semibold">Loading</div>
                         : (
                             <div className="grid grid-cols-4 gap-4">
-                                { events?.map(evt => <EventSummary key={evt.event_id} event={evt}/> )}
+                                { events?.map(evt => <EventSummary key={evt.event_id} event={evt} onClick={() => setSelectedEvent(evt)}/> )}
                             </div>
                         )
                 }
             </div>
+
+            {
+                selectedEvent && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center" aria-modal="true" role="dialog">
+                        <div onClick={() => setSelectedEvent(null)} className="absolute inset-0 backdrop-blur-sm"/>
+                        <EventDetails onClose={() => setSelectedEvent(null)} event={selectedEvent}/>
+                    </div>
+                )
+            }
 
             {
                 addingEvent && (
