@@ -85,7 +85,7 @@ export default function EventComposer({ onClose, onSuccess }) {
 
     return (
         <FocusTrap focusTrapOptions={{ initialFocus: false }}>
-            <dialog role="dialog" open aria-modal="true" aria-labelledby="composer-title" aria-describedby="composer-instructions composer-error" className="relative z-10 w-full max-w-lg bg-white rounded-lg shadow-xl p-6">
+            <dialog role="dialog" open aria-modal="true" aria-labelledby="composer-title" aria-describedby="composer-instructions composer-error" className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 w-full max-w-lg bg-white rounded-lg shadow-xl p-6">
                 <button onClick={onClose} className="absolute top-4 right-4 text-gray-600 hover:text-gray-800 text-2xl font-bold focus:outline-none focus:ring-2 focus:ring-indigo-500" aria-label="Close overlay">&times;</button>
 
                 <h2 id="composer-title" className="text-2xl font-semibold mb-4">Add New Event</h2>

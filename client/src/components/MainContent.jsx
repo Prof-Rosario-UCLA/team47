@@ -135,19 +135,19 @@ export default function MainContent({ user, setUser }) {
 
             {
                 selectedEvent && (
-                    <dialog role="dialog" open className="fixed inset-0 z-50 flex items-center justify-center" aria-modal="true">
+                    <div className="fixed inset-0 z-50 flex items-center justify-center" aria-modal="true">
                         <div onClick={() => setSelectedEvent(null)} className="absolute inset-0 backdrop-blur-sm"/>
                         <EventDetails onClose={() => setSelectedEvent(null)} event={selectedEvent}/>
-                    </dialog>
+                    </div>
                 )
             }
 
             {
                 addingEvent && (
-                    <dialog role="dialog" open className="fixed inset-0 z-50 flex items-center justify-center" aria-modal="true">
+                    <div className="fixed inset-0 z-50 flex items-center justify-center" aria-modal="true">
                         <div onClick={() => setAddingEvent(false)} className="absolute inset-0 backdrop-blur-sm"/>
                         <EventComposer onClose={() => setAddingEvent(false)} onSuccess={onEventCreationSuccess}/>
-                    </dialog>
+                    </div>
                 )
             }
         </main>
