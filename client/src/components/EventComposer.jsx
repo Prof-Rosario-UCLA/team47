@@ -1,5 +1,9 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { format } from "date-fns";
+import { useDropzone } from "react-dropzone";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { storage } from "../firebase";
+
 
 export default function EventComposer({ onClose, onSuccess }) {
     const [eventName, setEventName] = useState('');
@@ -11,7 +15,36 @@ export default function EventComposer({ onClose, onSuccess }) {
     const [error, setError] = useState(null);
     const [uploading, setUploading] = useState(false);
 
-    async function createEvent() {
+    const onDrop = useCallback((acceptedFiles) => {
+        if (acceptedFiles.length === 0) return;
+        const file = acceptedFiles[0];
+
+        setUploading(true);
+        setError(null);
+
+        const fileRef = ref(storage, `events/${file.name.replace(/\s+/g, "_")}-${Date.now()}`);
+
+        const uploadTask = uploadBytesResumable(fileRef, file);
+        uploadTask.on('state_changed', snapshot => {
+            // Could use to track progress
+        }, uploadError => {
+            setError(uploadError.message);
+            setUploading(false);
+        }, () => {
+            getDownloadURL(uploadTask.snapshot.ref)
+                .then((url) => { 
+                    setEventImageUrl(url);
+                    setUploading(false);
+                });
+        });
+    }, []);
+
+    const { getRootProps, getInputProps, isDragActive } = useDropzone({
+        onDrop, accept: { "image/*": [] }, multiple: false
+    });
+
+    async function createEvent(e) {
+        e.preventDefault();
         setUploading(true);
         setError(null);
         
@@ -78,7 +111,22 @@ export default function EventComposer({ onClose, onSuccess }) {
 
                 <div>
                     <label htmlFor="event-host" className="block text-gray-700">Host</label>
-                    <inpu id="event-host" type="text" value={eventHost} onChange={(e) => setEventHost(e.target.value)} placeholder="e.g. UCLA Triathlon" className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" required/>
+                    <input id="event-host" type="text" value={eventHost} onChange={(e) => setEventHost(e.target.value)} placeholder="e.g. UCLA Triathlon" className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" required/>
+                </div>
+
+                <div {...getRootProps()} className={`mt-4 p-6 border-2 border-dashed rounded-lg text-center cursor-pointer ${isDragActive ? "border-indigo-500 bg-indigo-50" : "border-gray-300"}`}>
+                    <input {...getInputProps()} />
+                        {isDragActive ? (
+                            <p>Drop the image here …</p>
+                        ) : (
+                            <p> Drag & drop an image here, or click to select one (optional)</p>
+                        )}
+                        
+                        {uploading && <p className="mt-2 text-sm">Uploading image…</p>}
+                        
+                        {eventImageUrl && (
+                            <img src={eventImageUrl} alt="Preview" className="mt-2 mx-auto max-h-40 rounded"/>
+                        )}
                 </div>
 
                 <button type="submit" disabled={uploading} className="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">

@@ -43,6 +43,10 @@ export default function EventDetails({ event, onClose }) {
                     <label className="block text-gray-700">Host</label>
                     <p className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">{event.host}</p>
                 </div>
+
+                {event.image_url && (
+                    <img src={event.image_url} alt="Preview" className="mt-2 mx-auto max-h-40 rounded"/>
+                )}
             </div>
         </div>
     );

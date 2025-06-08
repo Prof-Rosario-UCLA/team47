@@ -33,7 +33,7 @@ router.post('/register', async (req, res) => {
     try {
         if (await userExists(email)) return res.status(409).send({ msg: 'This email is already linked to an account' });
         const passwordHash = await bcrypt.hash(password, 12);
-        const user = await createUser(email, name, passwordHash);
+        const user = await createUser(name, email, passwordHash);
         
         const token = signToken({ uid: user.uid });
         setTokenCookie(res, token);

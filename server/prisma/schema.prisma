@@ -28,5 +28,5 @@ model Event {
   time          String
   description   String
   host          String
-  image_url     String?
+  image_url     String? @db.Text
 }
