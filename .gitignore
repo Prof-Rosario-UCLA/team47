@@ -12,4 +12,4 @@ dist/*
 client/rust/target
 client/rust/Cargo.lock
 client/rust/pkg
-client/dist
+client/dist/

@@ -1,6 +1,7 @@
 import express from 'express';
 import { createEvent, getEvents } from '../utils/db.js';
-import { cacheEvents, fetchEventsFromCache } from '../utils/redis.js';
+import { cacheEvents, fetchEventsFromCache, invalidateEventsCache } from '../utils/redis.js';
+import { summarizeEvents } from '../utils/open-ai-api.js';
 const router = express.Router();
 
 
@@ -13,8 +14,12 @@ router.get('/events', async (req, res) => {
         if (cached) return res.status(200).send(cached);
 
         const events = await getEvents(day);
-        await cacheEvents(day, events);
-        return res.status(200).send(events);
+        const summary = await summarizeEvents(events);
+        const data = { events, summary };
+
+        await cacheEvents(day, data);
+
+        return res.status(200).send(data);
 
     } catch (error) {
         console.error("Error in /events route:", error);
@@ -39,10 +44,7 @@ router.post('/event', async (req, res) => {
 
     try {
         await createEvent(name, location, day, time, description, host, image_url);
-
-        // Update cached events
-        const events = await getEvents(day);
-        await cacheEvents(day, events);
+        await invalidateEventsCache(day);
 
         res.sendStatus(200);
 

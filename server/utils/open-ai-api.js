@@ -1,5 +1,5 @@
-import { config } from 'dotenv'; config({ path: 'server/.env' });
-import axios from 'axios';
+import { config } from 'dotenv';
+config({ path: 'server/.env' });
 
 export async function summarizeEvents(events) {
     try {
@@ -12,8 +12,28 @@ export async function summarizeEvents(events) {
         EVENTS: ${JSON.stringify(events)}
         `;
 
-        const endpoint = '';
-        const response = await axios.get(endpoint);
+        const res = await fetch('https://api.openai.com/v1/chat/completions', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+            },
+            body: JSON.stringify({
+                model: 'gpt-4.1',
+                messages: [{ role: 'system', content: systemPrompt }],
+                max_tokens: 200,
+                temperature: 0.7,
+            }),
+        });
+
+        if (!res.ok) {
+            const errBody = await res.text();
+            throw new Error(`OpenAI API error ${res.status}: ${errBody}`);
+        }
+
+        const { choices } = await res.json();
+        const summary = choices?.[0]?.message?.content?.trim() ?? null;
+        return summary;
 
     } catch(e) {
         console.error('An error occurred while summarizing events:', e);

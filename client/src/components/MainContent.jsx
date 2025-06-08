@@ -9,12 +9,11 @@ init();
 
 export default function MainContent({ user, setUser }) {
     const [addingEvent, setAddingEvent] = useState(false);
-    const [events, setEvents] = useState(null);
+    const [eventsData, setEventsData] = useState(null);
     const [selectedEvent, setSelectedEvent] = useState(null);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState("");
-    const [filteredEvents, setFilteredEvents] = useState(null);
     const [selectedDate, setSelectedDate] = useState(new Date());
  
     async function signOut() {
@@ -37,10 +36,10 @@ export default function MainContent({ user, setUser }) {
     async function updateSelectedDate(change) {
         const newDate = new Date(selectedDate.getTime() + change * 24 * 60 * 60 * 1000);
         setSelectedDate(newDate);
-        await getEvents(newDate);
+        await getEventsData(newDate);
     }
 
-    async function getEvents(date) {
+    async function getEventsData(date) {
         setLoading(true);
         setError(null);
         setSearchTerm("");
@@ -53,7 +52,7 @@ export default function MainContent({ user, setUser }) {
             });
 
             if (res.ok) {
-                setEvents(await res.json());
+                setEventsData(await res.json());
             } else {
                 console.log(await res.json());
                 setError((await res.json()).msg);
@@ -67,16 +66,10 @@ export default function MainContent({ user, setUser }) {
         }
     }
 
-    function updateSearch(searchString) {
-        setSearchTerm(searchString);
-
-        if (searchString.length === 0) {
-            setFilteredEvents(null);
-            return;
-        }
-
-        const filtered = filter_events(events, searchString);
-        setFilteredEvents(filtered);
+    function filteredEvents() {
+        if (!eventsData) return null;
+        if (searchTerm.length === 0) return eventsData.events;
+        return filter_events(eventsData.events, searchTerm);
     }
 
     function formatDateDisplay(d) {
@@ -85,11 +78,10 @@ export default function MainContent({ user, setUser }) {
 
     async function onEventCreationSuccess() {
         setAddingEvent(false);
-        setSearchTerm('');
-        await getEvents(selectedDate);
+        await getEventsData(selectedDate);
     }
 
-    useEffect(() => { getEvents(selectedDate) }, []);
+    useEffect(() => { getEventsData(selectedDate) }, []);
 
     return (
         <div className="h-screen w-screen flex flex-col overflow-hidden bg-white">
@@ -114,7 +106,7 @@ export default function MainContent({ user, setUser }) {
                     <button onClick={() => updateSelectedDate(+1)} className="bg-gray-200 hover:bg-gray-300 rounded-full p-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">&#8250;</button>
                 </div>
 
-                <input type="text" value={searchTerm} onChange={(e) => updateSearch(e.target.value)} placeholder="Search" className="mt-4 w-72 md:w-96 px-4 py-2 rounded-full border border-gray-300 bg-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"/>
+                <input type="text" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} placeholder="Search" className="mt-4 w-72 md:w-96 px-4 py-2 rounded-full border border-gray-300 bg-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"/>
             </div>
 
             <div className="flex-1 bg-gray-200 border border-gray-300 px-6 pt-6 pb-0 overflow-y-auto">
@@ -124,9 +116,13 @@ export default function MainContent({ user, setUser }) {
                     : loading 
                         ? <div className="text-gray-600 font-semibold">Loading</div>
                         : (
-                            <div className="grid grid-cols-4 gap-4">
-                                { (filteredEvents ?? events)?.map(evt => <EventSummary key={evt.event_id} event={evt} onClick={() => setSelectedEvent(evt)}/> )}
+                            <div className="flex flex-col">
+                                <p className="w-full text-left mb-4">{eventsData?.summary}</p>
+                                <div className="grid grid-cols-4 gap-4">
+                                    { (filteredEvents())?.map(evt => <EventSummary key={evt.event_id} event={evt} onClick={() => setSelectedEvent(evt)}/> )}
+                                </div>
                             </div>
+                            
                         )
                 }
             </div>

@@ -106,4 +106,17 @@ export async function cacheEventDetails(event, expiration = 300) {
     }
 }
 
+export async function invalidateEventsCache(date) {
+    const key = `events:${date}:all`;
+
+    try {
+        const client = await getRedisClient();
+        await client.del(key);
+
+    } catch(e) {
+        console.error(`Error invalidating cache:`, e);
+        return false;
+    }
+}
+
 export default { fetchEventsFromCache, cacheEvents, fetchEventDetailsFromCache, cacheEventDetails };
