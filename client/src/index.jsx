@@ -22,8 +22,8 @@ function App() {
     }
 
     if (!user) {
-        if (mode === 'login') return <LoginComponent onSuccess={onAuth}/>
-        if (mode === 'register') return <CreateUserComponent onSuccess={onAuth}/>;
+        if (mode === 'login') return <LoginComponent onSuccess={onAuth} onBack={() => setMode('buttons')}/>
+        if (mode === 'register') return <CreateUserComponent onSuccess={onAuth} onBack={() => setMode('buttons')}/>;
         return (
             <div className="min-h-screen flex items-center justify-center bg-gray-50">
                 <div className="flex flex-col items-stretch space-y-4 w-fit px-4">

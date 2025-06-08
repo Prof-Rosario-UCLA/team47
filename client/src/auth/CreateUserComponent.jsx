@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-export default function CreateUserComponent({ onSuccess }) {
+export default function CreateUserComponent({ onSuccess, onBack }) {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -55,6 +55,9 @@ export default function CreateUserComponent({ onSuccess }) {
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-50">
             <div className="w-full max-w-sm space-y-8 p-8 bg-white rounded-xl shadow-lg">
+
+                <button type="button" onClick={onBack} className="absolute top-4 left-4 text-gray-500 hover:text-gray-800 text-sm focus:outline-none">← Back</button>
+
                 <h2 className="text-center text-3xl font-semibold text-gray-900">Sign Up</h2>
 
                 <form onSubmit={handleSubmit} className="mt-4 space-y-6">

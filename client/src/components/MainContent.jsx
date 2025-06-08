@@ -101,9 +101,9 @@ export default function MainContent({ user, setUser }) {
 
             <div className="flex flex-col items-center bg-white py-6">
                 <div className="flex items-center space-x-4">
-                    <button aria-label="Previous day" onClick={() => updateSelectedDate(-1)} className="bg-gray-200 hover:bg-gray-300 rounded-full p-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">&#8249;</button>
+                    <button aria-label="Previous day" onClick={() => updateSelectedDate(-1)} className="bg-gray-200 hover:bg-gray-300 rounded-full w-7 h-7 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">&#8249;</button>
                     <span className="text-lg font-semibold text-gray-800">{formatDateDisplay(selectedDate)}</span>
-                    <button aria-label="Next day" onClick={() => updateSelectedDate(+1)} className="bg-gray-200 hover:bg-gray-300 rounded-full p-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">&#8250;</button>
+                    <button aria-label="Next day" onClick={() => updateSelectedDate(+1)} className="bg-gray-200 hover:bg-gray-300 rounded-full w-7 h-7 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">&#8250;</button>
                 </div>
 
                 <label htmlFor="event-search" className="sr-only">Search events</label>
