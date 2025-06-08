@@ -13,10 +13,10 @@ export default function EventDetails({ event, onClose }) {
     }
 
     return (
-        <div className="relative z-10 w-full max-w-lg bg-white rounded-lg shadow-xl p-6">
+        <div role="dialog" aria-modal="true" aria-labelledby="modal-title" className="relative z-10 w-full max-w-lg bg-white rounded-lg shadow-xl p-6">
             <button onClick={onClose} className="absolute top-4 right-4 text-gray-600 hover:text-gray-800 text-2xl font-bold focus:outline-none" aria-label="Close overlay">&times;</button>
 
-            <h2 className="text-2xl font-semibold mb-4">Event Details</h2>
+            <h2 id="modal-title" className="text-2xl font-semibold mb-4">Event Details</h2>
 
             <div className="space-y-4">
                 <div>

@@ -101,18 +101,20 @@ export default function MainContent({ user, setUser }) {
 
             <div className="flex flex-col items-center bg-white py-6">
                 <div className="flex items-center space-x-4">
-                    <button onClick={() => updateSelectedDate(-1)} className="bg-gray-200 hover:bg-gray-300 rounded-full p-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">&#8249;</button>
+                    <button aria-label="Previous day" onClick={() => updateSelectedDate(-1)} className="bg-gray-200 hover:bg-gray-300 rounded-full p-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">&#8249;</button>
                     <span className="text-lg font-semibold text-gray-800">{formatDateDisplay(selectedDate)}</span>
-                    <button onClick={() => updateSelectedDate(+1)} className="bg-gray-200 hover:bg-gray-300 rounded-full p-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">&#8250;</button>
+                    <button aria-label="Next day" onClick={() => updateSelectedDate(+1)} className="bg-gray-200 hover:bg-gray-300 rounded-full p-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">&#8250;</button>
                 </div>
 
-                <input type="text" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} placeholder="Search" className="mt-4 w-72 md:w-96 px-4 py-2 rounded-full border border-gray-300 bg-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"/>
+                <label htmlFor="event-search" className="sr-only">Search events</label>
+                <input id="event-search" aria-describedby="search-help" type="text" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} placeholder="Search" className="mt-4 w-72 md:w-96 px-4 py-2 rounded-full border border-gray-300 bg-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"/>
+                <p id="search-help" className="sr-only">Enter keywords to filter events.</p>
             </div>
 
             <div className="flex-1 bg-gray-200 border border-gray-300 px-6 pt-6 pb-0 overflow-y-auto">
                 {
                     error 
-                    ? <div className="text-red-600">{error}</div>
+                    ? <div role="alert" className="text-red-600">{error}</div>
                     : loading 
                         ? <div className="text-gray-600 font-semibold">Loading</div>
                         : (
