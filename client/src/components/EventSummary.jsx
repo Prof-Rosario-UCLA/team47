@@ -13,10 +13,10 @@ export default function EventSummary({ event, onClick }) {
     }
 
     return (
-        <button aria-label={`View details for ${event.name}`} onClick={onClick} className="bg-white p-4 rounded-lg shadow-sm cursor-pointer">
+        <article aria-label={`View details for ${event.name}`} onClick={onClick} className="bg-white p-4 rounded-lg shadow-sm cursor-pointer">
             <h3 className="font-bold text-lg">{event.name}</h3>
             <p className="text-sm text-gray-600">{subtitle()}</p>
             <p className="mt-2 text-base">📍 {event.location}</p>
-        </button>
+        </article>
     );
 }

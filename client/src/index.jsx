@@ -40,19 +40,11 @@ function App() {
     return <MainContent user={user} setUser={setUser}/>;
 }
 
-
-<div className="min-h-screen flex items-center justify-center bg-gray-50">
-
-</div>
-
 ReactDOM
     .createRoot(document.getElementById('root'))
     .render(
         <AuthProvider>
-            <main>
-                <App/>
-            </main>
-
+            <App/>
             <CookieBanner/>
         </AuthProvider>
     );

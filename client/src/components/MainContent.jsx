@@ -84,7 +84,7 @@ export default function MainContent({ user, setUser }) {
     useEffect(() => { getEventsData(selectedDate) }, []);
 
     return (
-        <div className="h-screen w-screen flex flex-col overflow-hidden bg-white">
+        <main className="h-screen w-screen flex flex-col overflow-hidden bg-white">
             <header className="bg-blue-600 flex items-center justify-between px-6 py-4">
                 <h1 className="text-white text-2xl font-bold">BruinEvents</h1>
                 
@@ -121,7 +121,11 @@ export default function MainContent({ user, setUser }) {
                             <div className="flex flex-col">
                                 <p id="events-summary" aria-live="polite" className="w-full text-left mb-4">{eventsData?.summary}</p>
                                 <div id="event-list" role="list" aria-label="Event list" className="grid grid-cols-4 gap-4 items-stretch auto-rows-fr">
-                                    { (filteredEvents())?.map(evt => <EventSummary key={evt.event_id} role="listitem" event={evt} onClick={() => setSelectedEvent(evt)}/>)}
+                                    { (filteredEvents())?.map(evt => 
+                                        <li key={evt.event_id}>
+                                            <EventSummary event={evt} onClick={() => setSelectedEvent(evt)}/>
+                                        </li>
+                                    )}
                                 </div>
                             </div>
                             
@@ -131,21 +135,21 @@ export default function MainContent({ user, setUser }) {
 
             {
                 selectedEvent && (
-                    <div className="fixed inset-0 z-50 flex items-center justify-center" aria-modal="true" role="dialog">
+                    <dialog className="fixed inset-0 z-50 flex items-center justify-center" aria-modal="true">
                         <div onClick={() => setSelectedEvent(null)} className="absolute inset-0 backdrop-blur-sm"/>
                         <EventDetails onClose={() => setSelectedEvent(null)} event={selectedEvent}/>
-                    </div>
+                    </dialog>
                 )
             }
 
             {
                 addingEvent && (
-                    <div className="fixed inset-0 z-50 flex items-center justify-center" aria-modal="true" role="dialog">
+                    <dialog className="fixed inset-0 z-50 flex items-center justify-center" aria-modal="true">
                         <div onClick={() => setAddingEvent(false)} className="absolute inset-0 backdrop-blur-sm"/>
                         <EventComposer onClose={() => setAddingEvent(false)} onSuccess={onEventCreationSuccess}/>
-                    </div>
+                    </dialog>
                 )
             }
-        </div>
+        </main>
     );
 }

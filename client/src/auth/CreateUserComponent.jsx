@@ -53,7 +53,7 @@ export default function CreateUserComponent({ onSuccess, onBack }) {
     }
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <main className="min-h-screen flex items-center justify-center bg-gray-50">
             <div className="w-full max-w-sm space-y-8 p-8 bg-white rounded-xl shadow-lg">
 
                 <button aria-label="Go back" type="button" onClick={onBack} className="absolute top-4 left-4 text-gray-500 hover:text-gray-800 text-sm focus:outline-none">← Back</button>
@@ -62,25 +62,25 @@ export default function CreateUserComponent({ onSuccess, onBack }) {
 
                 <form aria-labelledby="signup-heading" aria-describedby={error ? 'signup-error' : undefined} onSubmit={handleSubmit} className="mt-4 space-y-6">
                     <div className="space-y-4">
-                        <label className="block">
-                            <span className="text-sm font-medium text-gray-700">Name</span>
+                        <fieldset className="block">
+                            <legend className="text-sm font-medium text-gray-700">Name</legend>
                             <input type="name" value={name} onChange={(e) => setName(e.target.value)} placeholder="Tim Apple" className="mt-1 block w-full rounded-md bg-gray-100 border border-gray-300 px-3 py-2 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" required/>
-                        </label>
+                        </fieldset>
 
-                        <label className="block">
-                            <span className="text-sm font-medium text-gray-700">Email</span>
+                        <fieldset className="block">
+                            <legend className="text-sm font-medium text-gray-700">Email</legend>
                             <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" className="mt-1 block w-full rounded-md bg-gray-100 border border-gray-300 px-3 py-2 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" required/>
-                        </label>
+                        </fieldset>
 
-                        <label className="block">
-                            <span className="text-sm font-medium text-gray-700">Password</span>
+                        <fieldset className="block">
+                            <legend className="text-sm font-medium text-gray-700">Password</legend>
                             <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••" className="mt-1 block w-full rounded-md bg-gray-100 border border-gray-300 px-3 py-2 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" required/>
-                        </label>
+                        </fieldset>
 
-                        <label className="block">
-                            <span className="text-sm font-medium text-gray-700">Confirm Password</span>
+                        <fieldset className="block">
+                            <legend className="text-sm font-medium text-gray-700">Confirm Password</legend>
                             <input type="password" value={confirm} onChange={(e) => setConfirm(e.target.value)} placeholder="••••••" className="mt-1 block w-full rounded-md bg-gray-100 border border-gray-300 px-3 py-2 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" required/>
-                        </label>
+                        </fieldset>
                     </div>
 
                     <button type="submit" disabled={loading} aria-busy={loading} className="w-full flex justify-center py-2 px-4 border border-transparent rounded-lg shadow-sm text-white text-lg font-medium bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 focus:outline-none focus:ring-2 focus: ring-offset-2 focus:ring-indigo-500">{loading ? "Loading..." : "Sign Up"}</button>
@@ -89,6 +89,6 @@ export default function CreateUserComponent({ onSuccess, onBack }) {
                     )}
                 </form>
             </div>
-        </div>
+        </main>
     );
 }
