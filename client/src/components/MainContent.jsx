@@ -4,6 +4,9 @@ import { format } from "date-fns";
 import EventSummary from "./EventSummary";
 import EventDetails from "./EventDetails";
 
+import init, { filter_events } from "../../rust/pkg/event_filter.js";
+init();
+
 export default function MainContent({ user, setUser }) {
     const [addingEvent, setAddingEvent] = useState(false);
     const [events, setEvents] = useState(null);
@@ -64,8 +67,16 @@ export default function MainContent({ user, setUser }) {
         }
     }
 
-    function updateSearch() {
+    function updateSearch(searchString) {
+        setSearchTerm(searchString);
 
+        if (searchString.length === 0) {
+            setFilteredEvents(null);
+            return;
+        }
+
+        const filtered = filter_events(events, searchString);
+        setFilteredEvents(filtered);
     }
 
     function formatDateDisplay(d) {
@@ -103,7 +114,7 @@ export default function MainContent({ user, setUser }) {
                     <button onClick={() => updateSelectedDate(+1)} className="bg-gray-200 hover:bg-gray-300 rounded-full p-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">&#8250;</button>
                 </div>
 
-                <input type="text" placeholder="Search" className="mt-4 w-72 md:w-96 px-4 py-2 rounded-full border border-gray-300 bg-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"/>
+                <input type="text" value={searchTerm} onChange={(e) => updateSearch(e.target.value)} placeholder="Search" className="mt-4 w-72 md:w-96 px-4 py-2 rounded-full border border-gray-300 bg-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"/>
             </div>
 
             <div className="flex-1 bg-gray-200 border border-gray-300 px-6 pt-6 pb-0 overflow-y-auto">
@@ -114,7 +125,7 @@ export default function MainContent({ user, setUser }) {
                         ? <div className="text-gray-600 font-semibold">Loading</div>
                         : (
                             <div className="grid grid-cols-4 gap-4">
-                                { events?.map(evt => <EventSummary key={evt.event_id} event={evt} onClick={() => setSelectedEvent(evt)}/> )}
+                                { (filteredEvents ?? events)?.map(evt => <EventSummary key={evt.event_id} event={evt} onClick={() => setSelectedEvent(evt)}/> )}
                             </div>
                         )
                 }

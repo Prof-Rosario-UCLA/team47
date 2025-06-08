@@ -9,3 +9,6 @@ dist/*
 *.lock
 .env
 .parcel-cache/
+client/rust/target
+client/rust/Cargo.lock
+client/rust/pkg
