@@ -1,12 +1,15 @@
-import mysql_db from "./mysql-config.js";
+import dotenv from 'dotenv';
+dotenv.config({ path: '../.env' });
+
+import { PrismaClient } from "@prisma/client";
+const prisma = new PrismaClient();
 
 export async function userExists(email) {
     if (!email) throw new Error('Missing email');
 
     try {
-        const user = await mysql_db.getOne('SELECT email FROM users WHERE email = ?', [email]);
-        if (user) return true;
-        else return false;
+        const user = await prisma.user.findUnique({ where: { email } });
+        return Boolean(user);
 
     } catch(e) {
         console.error(`An error occurred while checking for user existence:`, e);
@@ -20,9 +23,8 @@ export async function createUser(name, email, passwordHash) {
     if (!passwordHash) throw new Error('Missing password hash');
 
     try {
-        const uid = await mysql_db.insert('INSERT INTO users (name, email, password_hash) VALUES (?,?,?)', [name, email, passwordHash]);
-        const user = await mysql_db.getOne('SELECT uid, name, email FROM users WHERE uid = ?', [uid]);
-        return user;
+        const user = await prisma.user.create({ data: { name, email, passwordHash } });
+        return { uid: user.uid, name: user.name, email: user.email };
 
     } catch(e) {
         console.error('An error occurred while creating a user:', e);
@@ -34,8 +36,10 @@ export async function getUser(email) {
     if (!email) throw new Error('Missing email');
 
     try {
-        const user = await mysql_db.getOne('SELECT uid, name, email, password_hash AS passwordHash FROM users WHERE email = ? AND', [email]);
-        return user;
+        return prisma.user.findUnique({
+            where: { email },
+            select: { uid: true, name: true, email: true, passwordHash: true }
+        });
 
     } catch(e) {
         console.error('An error occurred while fetching a user:', e);
@@ -47,8 +51,12 @@ export async function getUserForSession(token) {
     if (!token) throw new Error('Missing token');
 
     try {
-        const user = await mysql_db.getOne('SELECT u.uid, u.name, u.email FROM sessions s INNER JOIN users u ON s.uid = u.uid WHERE s.token = ?', [token]);
-        return user;
+        const session = await prisma.session.findUnique({
+            where: { token },
+            include: { user: true }
+        });
+
+        return session?.user ?? null;
         
     } catch(e) {
         console.error('An error occurred while getting a user for session:', e);
@@ -61,7 +69,7 @@ export async function createSession(uid) {
 
     try {
         const token = crypto.randomUUID();
-        await mysql_db.insert('INSERT INTO sessions (uid, token) VALUES (?,?)', [uid, token]);
+        await prisma.session.create({ data: { uid, token } });
         return token;
 
     } catch(e) {
@@ -74,8 +82,7 @@ export async function destroySession(token) {
     if (!token) throw new Error('Missing token');
 
     try {
-        await mysql_db.do('DELETE FROM sessions WHERE token = ?', [token]);
-        return;
+        await prisma.session.delete({ where: { token } });
 
     } catch(e) {
         console.error('An error occurred while destroying session:', e);
@@ -88,8 +95,7 @@ export async function getEvents(day) {
     if (day.length !== 10) throw new Error('Invalid day');
 
     try {
-        const events = await mysql_db.do('SELECT event_id, name, day, time, description, host FROM events WHERE day = ?', [day]);
-        return events;
+        return prisma.event.findMany({ where: { day } });
 
     } catch(e) {
         console.error(`An error occurred while fetching events on ${date}:`, e);
@@ -103,8 +109,7 @@ export async function createEvent(name, location, day, time, description, host, 
     if (time.length !== 5) throw new Error('Invalid time');
 
     try {
-        const eventId = await mysql_db.insert('INSERT INTO events (name, location, day, time, description, host, image_url) VALUES (?,?,?,?,?,?,?)', [name, location, day, time, description, host, image_url]);
-        const event = await getEventDetails(eventId);
+        const event = await prisma.event.create({ data: { name, location, day, time, description, host, image_url } });
         return event;
 
     } catch(e) {
@@ -113,20 +118,7 @@ export async function createEvent(name, location, day, time, description, host, 
     }
 }
 
-export async function getEventDetails(eventId) {
-    if (!eventId) throw new Error(`Missing or invalid eventId (${eventId})`);
-
-    try {
-        const event = await mysql_db.getOne('SELECT * FROM events WHERE event_id = ?', [eventId]);
-        return event;
-
-    } catch(e) {
-        console.error(`An error occurred while fetching details of event with id ${eventId}:`, e);
-        throw e;
-    }
-}
-
-export default { getEvents, createEvent, getEventDetails };
+export default { getEvents, createEvent };
 
 
 // CREATE TABLE events (
@@ -139,6 +131,20 @@ export default { getEvents, createEvent, getEventDetails };
 //     location VARCHAR(50) NOT NULL,
 //     image_url VARCHAR(500) NULL
 // );
+
+
+// CREATE TABLE users (
+//     uid INT PRIMARY KEY AUTO_INCREMENT,
+//     email VARCHAR(100) NOT NULL,
+//     password_hash TEXT NOT NULL,
+//     name VARCHAR(100) NOT NULL
+// );
+
+// CREATE TABLE sessions (
+//     token VARCHAR(500) PRIMARY KEY,
+//     uid INT NOT NULL REFERENCES users(uid) ON DELETE CASCADE
+// );
+
 
 // INSERT INTO events (name, day, time, description, host, location) VALUES
 //     ("Swim practice", "06-06-2025", "18:00", "Relays and sprints.", "UCLA Triathlon", "Student Acitvities Center"),
@@ -202,16 +208,3 @@ export default { getEvents, createEvent, getEventDetails };
 //     ("Parent & Family Day", "12-06-2025", "09:00", "Campus tour and activities for families of incoming students.", "UCLA Admissions", "Campus West Gate"),
 //     ("International Food Festival", "12-06-2025", "12:00", "Taste dishes from around the world prepared by student groups.", "UCLA Global Programs", "Ackerman Union Lawn")
 // ;
-
-
-// CREATE TABLE users (
-//     uid INT PRIMARY KEY AUTO_INCREMENT,
-//     email VARCHAR(100) NOT NULL,
-//     password_hash TEXT NOT NULL,
-//     name VARCHAR(100) NOT NULL
-// );
-
-// CREATE TABLE sessions (
-//     token VARCHAR(500) PRIMARY KEY,
-//     uid INT NOT NULL REFERENCES users(uid) ON DELETE CASCADE
-// );
