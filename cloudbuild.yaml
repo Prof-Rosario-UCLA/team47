@@ -5,7 +5,7 @@ steps:
   - name: 'gcr.io/cloud-builders/npm'
     args: ['install'] # npm install
 
-  - name: 'docker.io/library/rust:1.78-slim'     # official Docker Hub image
+  - name: 'docker.io/library/rust:1.83-slim'     # official Docker Hub image
     id: build-wasm
     entrypoint: bash
     args:
