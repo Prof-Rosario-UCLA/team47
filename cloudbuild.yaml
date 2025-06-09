@@ -12,7 +12,7 @@ steps:
       - -c
       - |
         cargo install wasm-pack --version 0.13.1
-        wasm-pack build client/rust --release --target web --out-dir /workspace/client/pkg
+        wasm-pack build client/rust --release --target web --out-dir /workspace/client/rust/pkg
 
   - name: 'gcr.io/cloud-builders/npm'
     args: ['run', 'build'] # npm run build
