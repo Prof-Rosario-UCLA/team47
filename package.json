@@ -8,7 +8,7 @@
     "build:server": "echo 'Nothing to build.'",
     "dev:client": "parcel client/index.html --port 2000",
     "build:wasm": "wasm-pack build client/rust --release --target web --out-dir ./pkg",
-    "build:client": "npm run build:wasm && parcel build client/index.html --dist-dir client/dist",
+    "build:client": "parcel build client/index.html --dist-dir client/dist",
     "build": "npm run build:client"
   },
   "type": "module",
