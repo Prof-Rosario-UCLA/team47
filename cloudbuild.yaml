@@ -5,16 +5,14 @@ steps:
   - name: 'gcr.io/cloud-builders/npm'
     args: ['install'] # npm install
 
-  - name: 'gcr.io/cloud-builders/npm'
-    entrypoint: 'bash'
-    env:
-      - 'HOME=/root'
+  - name: rustlang/rust:1.78-slim     # official Docker Hub image
+    id: build-wasm
+    entrypoint: bash
     args:
-      - '-c'
+      - -c
       - |
-        curl https://sh.rustup.rs -sSf | sh -s -- -y --no-modify-path
-        source $HOME/.cargo/env
-        cargo install wasm-pack
+        cargo install wasm-pack --version 0.13.1
+        wasm-pack build client/rust --release --target web --out-dir /workspace/client/pkg
 
   - name: 'gcr.io/cloud-builders/npm'
     args: ['run', 'build'] # npm run build
