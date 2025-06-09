@@ -2,6 +2,15 @@ options:
   defaultLogsBucketBehavior: "REGIONAL_USER_OWNED_BUCKET"
 
 steps:
+  - name: 'rustwasm/wasm-pack:latest'
+    id: build-wasm
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        cd client/rust
+        wasm-pack build --release --target web --out-dir ../../pkg
+
   - name: 'gcr.io/cloud-builders/npm'
     args: ['install'] # npm install
 
