@@ -2,7 +2,8 @@
   "name": "cs144-final-project",
   "version": "1.0.0",
   "scripts": {
-    "start": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
+    "start": "node server/app.js",
+    "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
     "postinstall": "npx prisma generate",
     "dev:server": "nodemon server/app.js",
     "build:server": "echo 'Nothing to build.'",

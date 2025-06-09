@@ -1,6 +1,13 @@
 runtime: nodejs20
-env: standard
-
+entrypoint: node server/app.js
 handlers:
+  - url: /(.*\.(js|css|wasm|png|jpg|jpeg|gif|svg))
+    static_files: client/dist/\1
+    upload: client/dist/.*\.(js|css|wasm|png|jpg|jpeg|gif|svg)
+    secure: always
+
+  # SPA fallback
   - url: /.*
-    script: auto
+    static_files: client/dist/index.html
+    upload: client/dist/index.html
+    secure: always
