@@ -12,7 +12,7 @@ steps:
     args:
       - '-c'
       - |
-        curl https://sh.rustup.rs -sSf | sh -s -- -y
+        curl https://sh.rustup.rs -sSf | sh -s -- -y --no-modify-path
         source $HOME/.cargo/env
         cargo install wasm-pack
 
