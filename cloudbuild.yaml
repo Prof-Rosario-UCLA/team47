@@ -11,10 +11,8 @@ steps:
     args:
       - '-c'
       - |
-        # install Rust toolchain
         curl https://sh.rustup.rs -sSf | sh -s -- -y
-        source $HOME/.cargo/env
-        # install wasm-pack via cargo
+        source /root/.cargo/env
         cargo install wasm-pack
 
   - name: 'gcr.io/cloud-builders/npm'
