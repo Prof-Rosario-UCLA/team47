@@ -8,7 +8,8 @@ import LoginComponent from "./auth/LoginComponent";
 import MainContent from "./components/MainContent";
 import CookieBanner from "./components/CookieBanner";
 
-export const API_BASE = import.meta.env.PROD ? '' : 'http://localhost:8080';
+const IS_PROD = process.env.NODE_ENV === 'production';
+export const API_BASE = IS_PROD ? '' : 'http://localhost:8080';
 
 function App() {
     const { user, setUser, loading } = useAuth();
