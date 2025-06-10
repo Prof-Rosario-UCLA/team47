@@ -1,6 +1,3 @@
-import { config } from 'dotenv';
-config({ path: 'server/.env' });
-
 export async function summarizeEvents(events) {
     try {
         const systemPrompt = `

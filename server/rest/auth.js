@@ -1,5 +1,3 @@
-import dotenv from 'dotenv';
-dotenv.config({ path: 'server/.env' });
 import express from 'express';
 import { getUser, userExists, createUser, getUserByUid } from '../utils/db.js';
 import bcrypt from 'bcryptjs';

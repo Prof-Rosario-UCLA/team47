@@ -5,9 +5,12 @@ import cookieParser from 'cookie-parser';
 
 import authRoutes from './rest/auth.js';
 import apiRoutes from './rest/api.js';
+import { loadConfig } from './env.js';
 
 const app = express();
 const port = 1919;
+
+loadConfig();
 
 app.use(express.json());
 app.use(cors({ origin: 'http://localhost:2000', credentials: true }));
