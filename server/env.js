@@ -2,7 +2,7 @@ import { SecretManagerServiceClient } from '@google-cloud/secret-manager';
 const secretsToPull = ['OPENAI_API_KEY', 'REDIS_HOST', 'REDIS_PORT', 'JWT_SECRET', 'DATABASE_URL'];
 import dotenv from 'dotenv';
 
-function runningOnAppEngine() {
+export function runningOnAppEngine() {
     return !!process.env.GAE_ENV || !!process.env.GAE_SERVICE;
 }
 

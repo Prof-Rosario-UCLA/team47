@@ -8,6 +8,8 @@ import LoginComponent from "./auth/LoginComponent";
 import MainContent from "./components/MainContent";
 import CookieBanner from "./components/CookieBanner";
 
+export const API_BASE = import.meta.env.PROD ? '' : 'http://localhost:8080';
+
 function App() {
     const { user, setUser, loading } = useAuth();
     const [mode, setMode] = useState('buttons'); // 'buttons', 'login', 'register'

@@ -4,6 +4,7 @@ import { useDropzone } from "react-dropzone";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { storage } from "../firebase";
 import { FocusTrap } from "focus-trap-react";
+import { API_BASE } from "..";
 
 
 export default function EventComposer({ onClose, onSuccess }) {
@@ -50,7 +51,7 @@ export default function EventComposer({ onClose, onSuccess }) {
         setError(null);
         
         try {
-            const res = await fetch('http://localhost:1919/api/event', {
+            const res = await fetch(`${API_BASE}/api/event`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

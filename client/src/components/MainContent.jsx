@@ -5,6 +5,7 @@ import EventSummary from "./EventSummary";
 import EventDetails from "./EventDetails";
 
 import init, { filter_events } from "../../rust/pkg/event_filter.js";
+import { API_BASE } from "..";
 init();
 
 export default function MainContent({ user, setUser }) {
@@ -18,7 +19,7 @@ export default function MainContent({ user, setUser }) {
  
     async function signOut() {
         try {
-            const res = await fetch('http://localhost:1919/auth/logout', {
+            const res = await fetch(`${API_BASE}/auth/logout`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 credentials: 'include'
@@ -45,7 +46,7 @@ export default function MainContent({ user, setUser }) {
         setSearchTerm("");
 
         try {
-            const res = await fetch(`http://localhost:1919/api/events?day=${format(date, "dd-MM-yyyy")}`, {
+            const res = await fetch(`${API_BASE}/api/events?day=${format(date, "dd-MM-yyyy")}`, {
                 method: 'GET',
                 headers: { 'Content-Type': 'application/json' },
                 credentials: 'include'

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { API_BASE } from '..';
 
 export default function LoginComponent({ onSuccess, onBack }) {
     const [email, setEmail] = useState('');
@@ -9,7 +10,7 @@ export default function LoginComponent({ onSuccess, onBack }) {
         e.preventDefault();
         setError(null);
 
-        const res = await fetch('http://localhost:1919/auth/login', {
+        const res = await fetch(`${API_BASE}/auth/login`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             credentials: 'include',
