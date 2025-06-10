@@ -8,12 +8,12 @@ import apiRoutes from './rest/api.js';
 import { loadConfig } from './env.js';
 
 const app = express();
-const port = 1919;
+const port = process.env.PORT || 8080;
 
 loadConfig();
 
 app.use(express.json());
-app.use(cors({ origin: 'http://localhost:2000', credentials: true }));
+app.use(cors({ origin: true, credentials: true }));
 app.use(cookieParser());
 
 app.use('/auth', authRoutes);

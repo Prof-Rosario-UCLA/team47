@@ -6,6 +6,14 @@ handlers:
     upload: client/dist/.*\.(js|css|wasm|png|jpg|jpeg|gif|svg)
     secure: always
 
+  - url: /api/.*
+    script: auto
+    secure: always
+
+  - url: /auth/.*
+    script: auto
+    secure: always
+
   # SPA fallback
   - url: /.*
     static_files: client/dist/index.html
