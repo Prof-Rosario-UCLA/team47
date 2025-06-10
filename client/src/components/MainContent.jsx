@@ -108,7 +108,7 @@ export default function MainContent({ user, setUser }) {
                 </nav>
 
                 <label htmlFor="event-search" className="sr-only">Search events</label>
-                <input id="event-search" aria-describedby="search-help" aria-controls="event-list" type="text" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} placeholder="Search" className="mt-4 w-72 md:w-96 px-4 py-2 rounded-full border border-gray-300 bg-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"/>
+                <input id="event-search" aria-describedby="search-help" aria-controls="event-list" type="text" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} placeholder="Search" className="mt-4 max-w-lg w-[calc(100%-3rem)] px-4 py-2 rounded-full border border-gray-300 bg-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"/>
                 <p id="search-help" className="sr-only">Enter keywords to filter events.</p>
             </div>
 
@@ -121,7 +121,7 @@ export default function MainContent({ user, setUser }) {
                         : (
                             <div className="flex flex-col">
                                 <p id="events-summary" aria-live="polite" className="w-full text-left mb-4">{eventsData?.summary}</p>
-                                <ul id="event-list" aria-label="Event list" className="grid grid-cols-4 gap-4 items-stretch auto-rows-fr">
+                                <ul id="event-list" aria-label="Event list" className="grid gap-4 auto-rows-fr [grid-template-columns:repeat(auto-fit,minmax(16rem,1fr))] lg:grid-cols-4">
                                     { (filteredEvents())?.map(evt => 
                                         <li key={evt.event_id}>
                                             <EventSummary event={evt} onClick={() => setSelectedEvent(evt)}/>
