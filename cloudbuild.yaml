@@ -2,9 +2,6 @@ options:
   defaultLogsBucketBehavior: "REGIONAL_USER_OWNED_BUCKET"
 
 steps:
-  - name: 'gcr.io/cloud-builders/npm'
-    args: ['install'] # npm install
-
   - name: 'docker.io/library/rust:1.83-slim'     # official Docker Hub image
     id: build-wasm
     entrypoint: bash
@@ -13,6 +10,9 @@ steps:
       - |
         cargo install wasm-pack --version 0.13.1
         wasm-pack build client/rust --release --target web --out-dir /workspace/client/rust/pkg
+
+  - name: 'gcr.io/cloud-builders/npm'
+    args: ['install'] # npm install
 
   - name: 'gcr.io/cloud-builders/npm'
     args: ['run', 'build'] # npm run build

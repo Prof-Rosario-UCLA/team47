@@ -14,3 +14,4 @@ client/rust/Cargo.lock
 client/rust/pkg
 client/dist/
 prod.env
+.gcloudignore
