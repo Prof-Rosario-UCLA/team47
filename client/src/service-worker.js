@@ -1,54 +1,59 @@
-const VERSION = 'v1';
-const STATIC_CACHE = `static-${VERSION}`;
-const RUNTIME_CACHE = `runtime-${VERSION}`;
+const RUNTIME_CACHE = 'runtime-cache-1';
+
+async function fetchAndCache(request, cacheName) {
+    const response = await fetch(request);
+
+    if (response && response.ok) {
+        const cache = await caches.open(cacheName);
+        cache.put(request, response.clone());
+    }
+
+    return response;
+}
+
+self.addEventListener('install', event => {
+    self.skipWaiting();
+});
 
 self.addEventListener('activate', event => {
     event.waitUntil(
         caches.keys().then(keys =>
-            Promise.all(keys
-                .filter(k => ![STATIC_CACHE, RUNTIME_CACHE].includes(k))
-                .map(k => caches.delete(k))))
+            Promise.all(
+                keys
+                    .filter(k => !k.startsWith('runtime-cache'))
+                    .map(k => caches.delete(k))
+            )
+        )
     );
-    self.clients.claim();        // start controlling existing tabs
+
+    self.clients.claim();
 });
 
-/* small helper used in fetch */
-async function staleWhileRevalidate (request, cacheName) {
-    const cache   = await caches.open(cacheName);
-    const cached  = await cache.match(request);
-
-    const network = fetch(request)
-        .then(resp => {
-            if (resp && resp.status === 200) cache.put(request, resp.clone());
-            return resp;
-        })
-        .catch(() => cached);       // fall back to cache on network error
-
-    return cached || network;       // return cached first if it existed
-}
-
-/* ---------- FETCH ---------- */
 self.addEventListener('fetch', event => {
     const { request } = event;
     if (request.method !== 'GET') return;
-
+  
     const url = new URL(request.url);
+  
+    if (url.pathname.startsWith('/api/')) { // API: Network-first then fallback to cache
+        event.respondWith((async () => {
+            const cache = await caches.open(RUNTIME_CACHE);
+            const cached = await cache.match(request);
 
-    /*  API – network-first, fall back to cache so data is fresh   */
-    if (url.pathname.startsWith('/api/')) {
-        event.respondWith(staleWhileRevalidate(request, RUNTIME_CACHE));
+            if (cached) {
+                event.waitUntil(fetchAndCache(request, RUNTIME_CACHE));
+                return cached;
+            }
+
+            return await fetchAndCache(request, RUNTIME_CACHE);
+        })());
+
         return;
     }
-
-    /*  Other static files – cache-first, then network            */
-    event.respondWith(
-        caches.match(request).then(
-            cached => cached || fetch(request).then(resp => {
-                if (resp && resp.status === 200) {
-                    caches.open(RUNTIME_CACHE).then(c => c.put(request, resp.clone()));
-                }
-                return resp;
-            })
-        )
-    );
+  
+    event.respondWith((async () => { // Static files: Cache-first
+        const cached = await caches.match(request);
+        if (cached) return cached;
+        return await fetchAndCache(request, RUNTIME_CACHE);
+    })());
 });

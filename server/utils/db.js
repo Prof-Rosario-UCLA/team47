@@ -3,12 +3,10 @@ let client = null;
 
 function getClient() {
     if (client) return client;
-    console.log('Setting up Prisma', process.env.DATABASE_URL)
+
     client = new  PrismaClient({
         datasources: {
-            db: {
-                url: process.env.DATABASE_URL
-            }
+            db: { url: process.env.DATABASE_URL }
         }
     });
 
