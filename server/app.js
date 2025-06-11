@@ -1,16 +1,16 @@
 // app.js
+import { loadConfig, runningOnAppEngine } from './env.js';
+await loadConfig();
+
 import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 
 import authRoutes from './rest/auth.js';
 import apiRoutes from './rest/api.js';
-import { loadConfig, runningOnAppEngine } from './env.js';
 
 const app = express();
 const port = process.env.PORT || 8080;
-
-loadConfig();
 
 app.use(express.json());
 if (!runningOnAppEngine()) { app.use(cors({ origin: true, credentials: true })); }
