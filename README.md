@@ -38,7 +38,14 @@ You will have to create two `.env` files:
 
 1) Semantic HTML5 tags are used wherever relevant. Some examples of semantic tags present in the project are **`<header>`**, **`<nav>`**, **`<aside>`, `<dialog>`** and **`<label>`**. The project also uses **Drag and Drop** for uploading an image when creating a new event.
 
+https://github.com/user-attachments/assets/394e5f0a-34f0-4827-b701-9cc3a5a45553
+
+
 2) The app is **fully responsive**, and scales without any problem down to 320px-wide screens. For comparison, here is a comparison of how the main screen looks on desktop vs mobile.
+
+<img width="800" alt="Screenshot 2025-06-10 at 5 54 15 PM" src="https://github.com/user-attachments/assets/c8eccb69-f707-41d8-ba99-d914d68ca80a" />
+<img width="300" alt="Screenshot 2025-06-10 at 5 54 30 PM" src="https://github.com/user-attachments/assets/2f3096fb-524e-4953-93b3-c88e271c7283" />
+
 
 3) Every page that is dependent on an internet connection has an indicator informing the user that the web app is trying to fetch data.
 
@@ -51,6 +58,7 @@ You will have to create two `.env` files:
 7) Uses **Tailwind** for styling - no CSS written manually.
 
 8) Users are authenticated using **cookies with JWT**. The first time the website is displayed, users will see a **banner at the bottom** informing them of the usage of cookies. Depicted below.
+<img width="1300" alt="Screenshot 2025-06-10 at 5 56 26 PM" src="https://github.com/user-attachments/assets/e18a54aa-54e8-4c27-951d-33d07d0d4fba" />
 
 9) Using **Parcel & App Engine**, the app is not vulnerable to basic security concerns.
 
@@ -69,3 +77,9 @@ You will have to create two `.env` files:
 16) The app is fully usable with tab navigation, satisfies color contrast requirements, uses semantic HTML and uses all the appropriate ARIA attributes.
 
 17) The app is deployed on **Google App Engine**, using a **Cloud Build Trigger**. Logs from a deployment below.
+
+<img width="500" alt="Screenshot 2025-06-10 at 7 54 16 PM" src="https://github.com/user-attachments/assets/4e3f6de8-597f-4eee-9c9d-d8192c678ff8" />
+<img width="500" alt="Screenshot 2025-06-10 at 7 54 08 PM" src="https://github.com/user-attachments/assets/e7294699-04d4-4aec-96cc-ca5588ea76df" />
+<img width="500" alt="Screenshot 2025-06-10 at 7 54 02 PM" src="https://github.com/user-attachments/assets/1762cad6-7f2c-46e1-b8e4-5677a3681cfe" />
+<img width="500" alt="Screenshot 2025-06-10 at 7 53 52 PM" src="https://github.com/user-attachments/assets/96e01596-019d-4cc8-abe9-3ed288dfab55" />
+<img width="500" alt="Screenshot 2025-06-10 at 7 53 39 PM" src="https://github.com/user-attachments/assets/c726ad1f-fb6e-4fc2-99e5-944dd7dcaed9" />
