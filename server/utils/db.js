@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-const client = null;
+let client = null;
 
 function getClient() {
     if (client) return client;

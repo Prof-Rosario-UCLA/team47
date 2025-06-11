@@ -53,7 +53,7 @@ export async function cacheEvents(date, events, expiration = 300) {
     try {
         const client = await getRedisClient();
 
-        console.log(`Writing ${events.length} to cache for ${date}`);
+        console.log(`Writing events to cache for ${date}`);
         await client.set(key, JSON.stringify(events), { EX: expiration });
         console.log(`Cache updated.`);
 
