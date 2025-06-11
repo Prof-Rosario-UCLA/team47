@@ -40,7 +40,7 @@ You will have to create two `.env` files:
 
 2) The app is **fully responsive**, and scales without any problem down to 320px-wide screens. For comparison, here is a comparison of how the main screen looks on desktop vs mobile.
 
-3) Every page that is dependent on an internet connection has an indicator informing the user that the web app is trying to fetch data. Depicted below are 2 examples of such scenarios.
+3) Every page that is dependent on an internet connection has an indicator informing the user that the web app is trying to fetch data.
 
 4) The app does use **HTTPS**.
 
@@ -50,28 +50,24 @@ You will have to create two `.env` files:
 
 7) Uses **Tailwind** for styling - no CSS written manually.
 
-8) Users are authenticated using **cookies with JWT**.
+8) Users are authenticated using **cookies with JWT**. The first time the website is displayed, users will see a **banner at the bottom** informing them of the usage of cookies. Depicted below.
 
-9) The first time the website is displayed, users will see a **banner at the bottom** informing them of the usage of cookies. Depicted below.
+9) Using Parcel & App Engine, the app is not vulnerable to basic security concerns.
 
-10) 
+10) The app uses a MySQL database with the Prisma ORM, and Redis for caching (server-side).
 
-11) 
+11) The app uses Node.js and Express.
 
-Must be impervious to the most common web security vulnerabilities (e.g. SQL injection, CSRF, XSS). There are technologies that handle this for you.
-Must use a caching layer and a database. The database does not necessarily have to be MongoDB or relational (e.g. MySQL, PostgreSQL) but must make sense for your project. The database work must use an ORM or ODM.
-Should use Node.js and Express; however, if you wish to use something else, please include your plans in the spec.
+12) 
+
+13) The app uses a Rust WASM module to perform fuzzy search/sorting on events.
+
+14) The app uses OpenAI's API to provide AI-generated daily summaries of events.
+
+15) Uses React.
+
+16) The app is fully usable with tab navigation, satisfies color contrast requirements, uses semantic HTML and uses all the appropriate ARIA attributes.
+
+17) The app is deployed on Google App Engine, using a Cloud Build Trigger. Logs from a deployment below.
+
 The app must function as a PWA with a service worker. If data is unavailable offline, the app should still render its structure and display a message or progress indicator (e.g., "Attempting to fetch data..."). The app must be installable on desktop and mobile.
-[Extra Credit] Must use a WebAssembly module 
-Strong preference for AssemblyScript for Typescript but can use other languages supported by WebAssembly.
-Must create/use an API to (pick one of these three):
-Expose data to an end-user (e.g. providing cafe menus to outsiders)
-Interact with AI services such as OpenAI, Hugging Face etc.
-Use a real-time streaming framework, preferably WebTransport or Socket.io (WebSockets)
-Must use a significant front-end framework such as React, Angular, Vue,js, Svelte, SolidJS, Quik etc.
-Must comply with basic accessibility principles (e.g., color contrast, tab navigation, semantic HTML). ARIA attributes should be used where applicable.
-These are sufficient for credit. If you want to swap out one of these for another, let us know in your write-up.
-Depending on your app, these features may not necessarily be explicit. For example, in a video game, having the character speak something while displaying styled text on the screen suffices for alt text. For example, in League of Legends you may hear the announcer say "Double Kill! Triple Kill!" with the same words appearing on the screen. This is a form of accessibility.
-Must be deployed onto Google Cloud: Google App Engine (single and pairs) or Google Kubernetes Engine (groups of 3 or 4) and use CI/CD principles via Github Actions.
-We may allow other deployment strategies as long as they provide scalability and fault tolerance. You must describe it in your proposal.
-The deployment must be triggered via CI/CD (not manual kubectl apply). You must include GitHub Actions logs showing build, test, and deploy stages.

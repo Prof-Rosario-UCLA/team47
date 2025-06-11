@@ -1,18 +1,25 @@
 import { PrismaClient } from "@prisma/client";
-console.log('Setting up Prisma', process.env.DATABASE_URL)
-const prisma = new PrismaClient({
-    datasources: {
-        db: {
-            url: process.env.DATABASE_URL
+const client = null;
+
+function getClient() {
+    if (client) return client;
+    console.log('Setting up Prisma', process.env.DATABASE_URL)
+    client = new  PrismaClient({
+        datasources: {
+            db: {
+                url: process.env.DATABASE_URL
+            }
         }
-    }
-});
+    });
+
+    return client;
+}
 
 export async function userExists(email) {
     if (!email) throw new Error('Missing email');
 
     try {
-        const user = await prisma.user.findUnique({ where: { email } });
+        const user = await getClient().user.findUnique({ where: { email } });
         return Boolean(user);
 
     } catch(e) {
@@ -27,7 +34,7 @@ export async function createUser(name, email, passwordHash) {
     if (!passwordHash) throw new Error('Missing password hash');
 
     try {
-        const user = await prisma.user.create({ data: { name, email, passwordHash } });
+        const user = await getClient().user.create({ data: { name, email, passwordHash } });
         return { uid: user.uid, name: user.name, email: user.email };
 
     } catch(e) {
@@ -40,7 +47,7 @@ export async function getUser(email) {
     if (!email) throw new Error('Missing email');
 
     try {
-        return prisma.user.findUnique({
+        return getClient().user.findUnique({
             where: { email },
             select: { uid: true, name: true, email: true, passwordHash: true }
         });
@@ -55,7 +62,7 @@ export async function getUserByUid(uid) {
     if (!uid) throw new Error('Missing uid');
 
     try {
-        return prisma.user.findUnique({ where: { uid }, select: { uid: true, name: true, email: true } });
+        return getClient().user.findUnique({ where: { uid }, select: { uid: true, name: true, email: true } });
         
     } catch(e) {
         console.error('An error occurred while getting a user by uid:', e);
@@ -68,7 +75,7 @@ export async function getEvents(day) {
     if (day.length !== 10) throw new Error('Invalid day');
 
     try {
-        return prisma.event.findMany({ where: { day } });
+        return getClient().event.findMany({ where: { day } });
 
     } catch(e) {
         console.error(`An error occurred while fetching events on ${date}:`, e);
@@ -82,7 +89,7 @@ export async function createEvent(name, location, day, time, description, host, 
     if (time.length !== 5) throw new Error('Invalid time');
 
     try {
-        const event = await prisma.event.create({ data: { name, location, day, time, description, host, image_url } });
+        const event = await getClient().event.create({ data: { name, location, day, time, description, host, image_url } });
         return event;
 
     } catch(e) {
@@ -91,27 +98,7 @@ export async function createEvent(name, location, day, time, description, host, 
     }
 }
 
-
-// CREATE TABLE events (
-//     event_id INT PRIMARY KEY AUTO_INCREMENT,
-//     name VARCHAR(40) NOT NULL,
-//     day VARCHAR(10) NOT NULL,
-//     time VARCHAR(5) NOT NULL,
-//     description VARCHAR(500) NOT NULL,
-//     host VARCHAR(50) NOT NULL,
-//     location VARCHAR(50) NOT NULL,
-//     image_url VARCHAR(500) NULL
-// );
-
-
-// CREATE TABLE users (
-//     uid INT PRIMARY KEY AUTO_INCREMENT,
-//     email VARCHAR(100) NOT NULL,
-//     password_hash TEXT NOT NULL,
-//     name VARCHAR(100) NOT NULL
-// );
-
-// INSERT INTO events (name, day, time, description, host, location) VALUES
+// INSERT INTO Event (name, day, time, description, host, location) VALUES
 //     ("Swim practice", "06-06-2025", "18:00", "Relays and sprints.", "UCLA Triathlon", "Student Acitvities Center"),
 //     ("SQL Injection Workshop", "06-06-2025", "19:00", "Join for a workshop to learn about SQL injection and how it may affect YOUR website! Free pizza provided :)", "ACM Cyber", "Boelter Hall 5427"),
 //     ("CS Townhall", "06-06-2025", "20:00", "Come to the Computer Science department's annual town hall to hear our fantastic professors answer your questions and talk about the future of the department.", "UCLA Computer Science", "Mong Learning Center"),
