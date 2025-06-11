@@ -119,12 +119,12 @@ export default function EventComposer({ onClose, onSuccess }) {
                         <input id="event-host" type="text" value={eventHost} onChange={(e) => setEventHost(e.target.value)} placeholder="e.g. UCLA Triathlon" className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" required/>
                     </div>
 
-                    <button tabIndex={0} aria-label="Drag & drop an image or click to upload" {...getRootProps()} className={`mt-4 p-6 border-2 border-dashed rounded-lg text-center cursor-pointer ${isDragActive ? "border-indigo-500 bg-indigo-50" : "border-gray-300"}`}>
+                    <button tabIndex={0} aria-label="Drag & drop an image or click to upload" {...getRootProps()} className={`w-full mt-4 p-6 border-2 border-dashed rounded-lg text-center cursor-pointer ${isDragActive ? "border-indigo-500 bg-indigo-50" : "border-gray-300"}`}>
                         <input {...getInputProps()} aria-hidden="true"/>
                             {isDragActive ? (
-                                <p>Drop the image here …</p>
+                                <p>Drop the image here to upload it</p>
                             ) : (
-                                <p> Drag & drop an image here, or click to select one (optional)</p>
+                                <p>Drag & drop an image here, or click to select one (optional)</p>
                             )}
                             
                             {uploading && <p className="mt-2 text-sm">Uploading image…</p>}

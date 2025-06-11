@@ -36,7 +36,7 @@ You will have to create two `.env` files:
 
 ### How the Project Spec is satisfied
 
-1) Semantic HTML5 tags are used wherever relevant. Some examples of semantic tags present in the project are **`<header>`**, **`<nav>`**, **`<aside>`** and **`<label>`**. The project also uses **Drag and Drop** for uploading an image when creating a new event.
+1) Semantic HTML5 tags are used wherever relevant. Some examples of semantic tags present in the project are **`<header>`**, **`<nav>`**, **`<aside>`, `<dialog>`** and **`<label>`**. The project also uses **Drag and Drop** for uploading an image when creating a new event.
 
 2) The app is **fully responsive**, and scales without any problem down to 320px-wide screens. For comparison, here is a comparison of how the main screen looks on desktop vs mobile.
 
@@ -54,7 +54,7 @@ You will have to create two `.env` files:
 
 9) The first time the website is displayed, users will see a **banner at the bottom** informing them of the usage of cookies. Depicted below.
 
-10)
+10) 
 
 11) 
 

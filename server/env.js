@@ -19,6 +19,7 @@ export async function loadConfig() {
             });
             process.env[name] = v.payload.data.toString('utf8');
             console.log(`Loaded secret ${name}`);
+            console.log(v.payload.data.toString('utf8'))
         }));
     }
 }
