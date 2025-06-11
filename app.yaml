@@ -1,5 +1,10 @@
 runtime: nodejs20
+
 entrypoint: node server/app.js
+
+vpc_access_connector:
+  name: "projects/cs144-s25-mariusg/locations/us-west1/connectors/appengine-connector"
+
 handlers:
   - url: /api/.*
     script: auto
