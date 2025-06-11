@@ -25,14 +25,39 @@ This is what led me to building this website, which is intended to solve both pr
 
 ### Running the project
 
-Clone the repo then run: `npm install` followed by `npm run build` and finally `npm start`.
+#### Prerequisites
 
-You must have the following installed on your machine:
-- **Node.js**
+- Node.js (v16+)
+- Rust + wasm-pack (for the fuzzy-search WASM module)
+- MySQL (with a database URL you can connect to)
+- Redis (running on REDIS_HOST:REDIS_PORT)
 
-You will have to create two `.env` files:
-- `.env` (at the root of the project): should contain a value for `DATABASE_URL`. This is used by Prisma (ORM). Find the specification for how to specify the correct URL [here](https://www.prisma.io/docs/orm/reference/connection-urls). 
-- `server/.env`: should contain 4 key/value pairs; `OPENAI_API_KEY`: an OpenAI API key to use | `REDIS_HOST`: the Redis host to use (if you are running Redis locally, you can use `localhost`) | `REDIS_PORT`: the port to be used for Redis (usually 6379) | `JWT_SECRET`: used for authentication, can be any string you like
+#### Clone & Install
+
+```
+git clone https://github.com/Prof-Rosario-UCLA/team47
+git cs144-final-project
+npm install
+```
+
+#### .env file
+
+You will have to create a `.env` file at `server/.env`, containing:
+- `DATABASE_URL`: Used by Prisma (ORM) to connect to MySQL. Find the specification for how to specify the correct URL [here](https://www.prisma.io/docs/orm/reference/connection-urls). You will also have to configure the DB schema, which Prisma can do. `cd` into `server` then run `npx prisma db push` (be aware that this will overwrite current data).
+- `REDIS_HOST`: Redis host
+- `REDIS_PORT`: Redis port (usually 6379)
+- `JWT_SECRET`: A JWT secret to use for authentication (can be any string)
+- `OPENAI_API_KEY`: An OpenAI API key to use
+
+#### Build & Run
+
+```
+npm run build:wasm
+npm run build
+npm run dev
+```
+
+
 
 ### How the Project Spec is satisfied
 
