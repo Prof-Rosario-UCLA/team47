@@ -4,7 +4,7 @@ let redisClient = null;
 
 async function getRedisClient() {
   if (!redisClient) {
-    console.log('Creating new Redis client');
+    console.log('Creating new Redis client', process.env.REDIS_HOST, process.env.REDIS_PORT);
     redisClient = createClient({
         socket: {
             host: process.env.REDIS_HOST,
