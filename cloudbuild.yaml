@@ -1,9 +1,8 @@
 options:
   defaultLogsBucketBehavior: "REGIONAL_USER_OWNED_BUCKET"
 
-# vpc_access_connector:
-#   name: "projects/cs144-s25-mariusg/locations/us-west1/connectors/appengine-connector"
-#   egress_setting: ALL_TRAFFIC
+vpc_access_connector:
+  name: "projects/cs144-s25-mariusg/locations/us-west1/connectors/appengine-connector"
 
 steps:
   - name: 'docker.io/library/rust:1.83-slim'     # official Docker Hub image
