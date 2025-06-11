@@ -64,7 +64,7 @@ https://github.com/user-attachments/assets/394e5f0a-34f0-4827-b701-9cc3a5a45553
 
 10) The app uses a **MySQL database** with the **Prisma ORM**, and **Redis for server-side caching**.
 
-11) The app uses **Node.js** and Express.
+11) The app uses **Node.js** and **Express**.
 
 12) The app uses a Service Worker that is cache-first for static files, and network-first for API calls. Authentication can't be handled by the service worker, so it ignores auth-related requests completely. When data is unavailable, there is an indicator that the app is attempting to load, or that there was a network error.
 
