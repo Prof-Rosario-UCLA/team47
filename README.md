@@ -58,7 +58,7 @@ You will have to create two `.env` files:
 
 11) The app uses Node.js and Express.
 
-12) 
+12) The app uses a Service Worker that is cache-first for static files, and network-first for API calls. Authentication can't be handled by the service worker, so it ignores auth-related requests completely. When data is unavailable, there is an indicator that the app is attempting to load, or that there was a network error.
 
 13) The app uses a Rust WASM module to perform fuzzy search/sorting on events.
 
@@ -69,5 +69,3 @@ You will have to create two `.env` files:
 16) The app is fully usable with tab navigation, satisfies color contrast requirements, uses semantic HTML and uses all the appropriate ARIA attributes.
 
 17) The app is deployed on Google App Engine, using a Cloud Build Trigger. Logs from a deployment below.
-
-The app must function as a PWA with a service worker. If data is unavailable offline, the app should still render its structure and display a message or progress indicator (e.g., "Attempting to fetch data..."). The app must be installable on desktop and mobile.

@@ -4,11 +4,8 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 const router = express.Router();
 
-const JWT_SECRET = process.env.JWT_SECRET;
-if (!JWT_SECRET) console.error('Missing JWT Secret');
-
-export function signToken(payload) { return jwt.sign(payload, JWT_SECRET, { expiresIn: '7d' }); }
-export function verifyToken(token) { return jwt.verify(token, JWT_SECRET); }
+export function signToken(payload) { return jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '7d' }); }
+export function verifyToken(token) { return jwt.verify(token, process.env.JWT_SECRET); }
 
 function setTokenCookie(res, token) {
     res.cookie('jwt_token', token, {
