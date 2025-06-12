@@ -61,6 +61,9 @@ npm run dev
 
 ### How the Project Spec is satisfied
 
+**NOTE:** For some reason, the manifest.json is treated as invalid in deployment, but works locally – which makes it impossible to install from production. I am attaching an image of having installed it on my machine using localhost.
+
+
 1) Semantic HTML5 tags are used wherever relevant. Some examples of semantic tags present in the project are **`<header>`**, **`<nav>`**, **`<aside>`, `<dialog>`** and **`<label>`**. The project also uses **Drag and Drop** for uploading an image when creating a new event.
 
 https://github.com/user-attachments/assets/394e5f0a-34f0-4827-b701-9cc3a5a45553

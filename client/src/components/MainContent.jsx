@@ -90,11 +90,11 @@ export default function MainContent({ user, setUser }) {
                 <h1 className="text-white text-2xl font-bold">BruinEvents</h1>
                 
                 <div className="space-x-2">
-                    <button onClick={() => setAddingEvent(true)} className="px-4 py-2 rounded-lg bg-white text-blue-600 font-medium shadow-sm hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-600">
+                    <button onClick={() => setAddingEvent(true)} className="px-2 py-2 rounded-lg bg-white text-blue-600 font-medium shadow-sm hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-600">
                         Add Event
                     </button>
 
-                    <button onClick={signOut} className="px-4 py-2 rounded-lg bg-white text-blue-600 font-medium shadow-sm hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-600">
+                    <button onClick={signOut} className="px-2 py-2 rounded-lg bg-white text-blue-600 font-medium shadow-sm hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-600">
                         Sign Out
                     </button>
                 </div>
